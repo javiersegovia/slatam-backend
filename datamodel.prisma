@@ -1,0 +1,77 @@
+enum UserRole {
+  MODERATOR
+  SUPPLIER
+  BUYER
+}
+
+enum CompanyRole {
+  SUPPLIER
+  BUYER
+}
+
+enum OrderStatus {
+  PENDING
+  PROCESSING
+  CANCELLED
+  DECLINED
+  COMPLETED
+}
+
+type User {
+  id: ID! @id
+  email: String! @unique
+  password: String!
+  firstName: String!
+  lastName: String!
+  role: [UserRole!]! @default(value: BUYER) @scalarList(strategy: RELATION)
+  phone: String
+  company: Company @relation(name: "UsersInCompany")
+  favoriteItems: [Item]
+  resetToken: String
+  resetTokenExpiry: Float
+}
+
+type Company {
+  id: ID! @id
+  owner: User! @relation(name: "CompanyBelongsTo")
+  name: String! @unique
+  companyRole: [CompanyRole!]! @scalarList(strategy: RELATION)
+  country: String
+  city: String
+  postalCode: Int
+  members: [User] @relation(name: "UsersInCompany")
+  items: [Item] @relation(onDelete: CASCADE)
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+}
+
+type Item {
+  id: ID! @id
+  title: String!
+  description: String!
+  sku: String
+  price: Int!
+  owner: Company!
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+}
+
+type Order {
+  id: ID! @id
+  status: OrderStatus!
+  items: [OrderItem!]! @relation(onDelete: CASCADE)
+  supplier: Company!
+  buyer: User!
+  totalPrice: Int!
+}
+
+type OrderItem {
+  id: ID! @id
+  title: String!
+  description: String!
+  sku: String
+  price: Int!
+  owner: Company!
+  quantity: Int! @default(value: 1)
+}
+
