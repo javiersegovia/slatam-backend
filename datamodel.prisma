@@ -50,10 +50,17 @@ type Item {
   title: String!
   description: String!
   sku: String
+  image: [ItemImage!]!
   price: Int!
   owner: Company!
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
+}
+
+type ItemImage {
+  id: ID! @id
+  main: String
+  thumbnail: String
 }
 
 type Order {

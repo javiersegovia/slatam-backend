@@ -22,7 +22,6 @@ app.use((req, res, next) => {
   const { sltmSessionToken } = req.cookies
 
   if (sltmSessionToken) {
-    console.log('token readed')
     const { userId } = jwt.verify(sltmSessionToken, process.env.APP_SECRET)
     req.userId = userId
   } else {

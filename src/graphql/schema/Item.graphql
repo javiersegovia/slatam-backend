@@ -1,0 +1,7 @@
+type Item {
+  id: ID!
+  title: String!
+  description: String!
+  price: String!
+  sku: String
+}

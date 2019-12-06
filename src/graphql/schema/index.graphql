@@ -1,0 +1,7 @@
+# import * from "./generated/prisma.graphql"
+# import Query.*, * from "./Query.graphql"
+# import Mutation.*, * from "./Mutation.graphql"
+# import * from "./General.graphql"
+# import * from "./User.graphql"
+# import * from "./Company.graphql"
+# import * from "./Item.graphql"

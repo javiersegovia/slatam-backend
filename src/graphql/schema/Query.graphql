@@ -1,0 +1,30 @@
+type Query {
+  ### /////////////////////// ###
+  ###          USERS          ###
+  ### /////////////////////// ###
+  users: [User]!
+
+  ### /////////////////////// ###
+  ###        COMPANIES        ###
+  ### /////////////////////// ###
+
+  company(where: CompanyWhereUniqueInput!): Company!
+  companies(
+    where: CompanyWhereUniqueInput
+    orderBy: CompanyOrderByInput
+    skip: Int
+    first: Int
+  ): [Company]!
+
+  ### /////////////////////// ###
+  ###          ITEMS          ###
+  ### /////////////////////// ###
+
+  item(where: ItemWhereUniqueInput!): Item
+  items(
+    where: ItemWhereUniqueInput
+    orderBy: ItemOrderByInput
+    skip: Int
+    first: Int
+  ): [Item]!
+}

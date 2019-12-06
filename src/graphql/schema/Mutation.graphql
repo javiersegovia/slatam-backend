@@ -1,0 +1,58 @@
+type Mutation {
+  ### /////////////////////// ###
+  ###         SESSION         ###
+  ### /////////////////////// ###
+
+  signUp(
+    email: String!
+    password: String!
+    firstName: String!
+    lastName: String!
+  ): User!
+  signIn(email: String!, password: String!): User!
+  signOut: SuccessMessage
+  requestReset(email: String!): SuccessMessage
+  resetPassword(
+    resetToken: String!
+    password: String!
+    confirmPassword: String!
+  ): User!
+
+  ### /////////////////////// ###
+  ###          USERS          ###
+  ### /////////////////////// ###
+
+  createRandomUser: User!
+  deleteAllUsers: SuccessMessage
+
+  ### /////////////////////// ###
+  ###        COMPANIES        ###
+  ### /////////////////////// ###
+
+  createCompany(
+    name: String!
+    companyRole: [CompanyRole!]!
+    country: String
+    city: String
+    postalCode: Int
+  ): Company!
+
+  ### /////////////////////// ###
+  ###          ITEMS          ###
+  ### /////////////////////// ###
+
+  createItem(
+    title: String!
+    description: String!
+    price: Int!
+    sku: String
+  ): Item!
+  updateItem(
+    id: ID!
+    title: String
+    description: String
+    price: Int
+    sku: String
+  ): Item!
+  deleteItem(id: ID!): Item
+}

@@ -29,6 +29,10 @@ var models = [
     embedded: false
   },
   {
+    name: "ItemImage",
+    embedded: false
+  },
+  {
     name: "Order",
     embedded: false
   },

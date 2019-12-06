@@ -1,0 +1,20 @@
+type Company {
+  id: ID!
+  owner: User!
+  name: String!
+  companyRole: [CompanyRole!]!
+  country: String
+  city: String
+  postalCode: Int
+  items(
+    where: ItemWhereInput
+    orderBy: ItemOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Item!]
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}

@@ -1,52 +1,46 @@
 const { makeExecutableSchema } = require('apollo-server-express')
-const { merge } = require('lodash')
+const { applyMiddleware } = require('graphql-middleware')
+const merge = require('lodash/merge')
+const { importSchema } = require('graphql-import')
+const middlewares = require('./middlewares')
 
 // CUSTOM SCALAR TYPES
-const custom = require('./types/custom')
-
-// TYPE DEFS
-const General = require('./types/General')
-const User = require('./types/User')
+const customScalars = require('./customScalars')
 
 // QUERIES
 const userQueries = require('./queries/user')
+const itemQueries = require('./queries/item')
+const companyQueries = require('./queries/company')
 
 // MUTATIONS
 const userMutations = require('./mutations/user')
+const itemMutations = require('./mutations/item')
+const companyMutations = require('./mutations/company')
 
 // SUBCRIPTIONS
 // ...
 
-const Root = /* GraphQL */ `
-  type Query {
-    dummy: String
-  }
-  type Mutation {
-    dummy: String
-  }
-  type Subscription {
-    dummy: String
-  }
-  schema {
-    query: Query
-    mutation: Mutation
-    subscription: Subscription
-  }
-`
-
 const resolvers = merge(
   {},
-  custom.resolvers,
+  customScalars.resolvers,
   // queries
   userQueries,
+  itemQueries,
+  companyQueries,
   // mutations
-  userMutations
+  userMutations,
+  itemMutations,
+  companyMutations
 )
 
+const schemaDefs = importSchema('./src/graphql/schema/index.graphql')
+
 const schema = makeExecutableSchema({
-  typeDefs: [Root, custom.typeDefs, General, User],
+  typeDefs: [customScalars.typeDefs, schemaDefs],
   resolvers,
   resolverValidationOptions: { requireResolversForResolveType: false },
 })
 
-module.exports = schema
+const schemaWithMiddleWares = applyMiddleware(schema, ...middlewares)
+
+module.exports = schemaWithMiddleWares
