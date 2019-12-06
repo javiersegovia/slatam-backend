@@ -296,7 +296,9 @@ export interface ClientConstructor<T> {
  * Types
  */
 
-export type UserRole = "MODERATOR" | "SUPPLIER" | "BUYER";
+export type UserRole = "APP_MODERATOR" | "COMPANY_ADMIN" | "COMPANY_MANAGER";
+
+export type ItemStatus = "PRIVATE" | "PUBLIC";
 
 export type ItemOrderByInput =
   | "id_ASC"
@@ -309,6 +311,8 @@ export type ItemOrderByInput =
   | "sku_DESC"
   | "price_ASC"
   | "price_DESC"
+  | "status_ASC"
+  | "status_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
@@ -337,10 +341,22 @@ export type UserOrderByInput =
   | "lastName_DESC"
   | "phone_ASC"
   | "phone_DESC"
+  | "country_ASC"
+  | "country_DESC"
+  | "city_ASC"
+  | "city_DESC"
   | "resetToken_ASC"
   | "resetToken_DESC"
   | "resetTokenExpiry_ASC"
-  | "resetTokenExpiry_DESC";
+  | "resetTokenExpiry_DESC"
+  | "verifiedEmail_ASC"
+  | "verifiedEmail_DESC"
+  | "verifiedPhone_ASC"
+  | "verifiedPhone_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "lastSeen_ASC"
+  | "lastSeen_DESC";
 
 export type CompanyOrderByInput =
   | "id_ASC"
@@ -385,7 +401,11 @@ export type OrderOrderByInput =
   | "status_ASC"
   | "status_DESC"
   | "totalPrice_ASC"
-  | "totalPrice_DESC";
+  | "totalPrice_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC";
 
 export type MutationType = "CREATED" | "UPDATED" | "DELETED";
 
@@ -463,6 +483,10 @@ export interface ItemWhereInput {
   price_gt?: Maybe<Int>;
   price_gte?: Maybe<Int>;
   owner?: Maybe<CompanyWhereInput>;
+  status?: Maybe<ItemStatus>;
+  status_not?: Maybe<ItemStatus>;
+  status_in?: Maybe<ItemStatus[] | ItemStatus>;
+  status_not_in?: Maybe<ItemStatus[] | ItemStatus>;
   createdAt?: Maybe<DateTimeInput>;
   createdAt_not?: Maybe<DateTimeInput>;
   createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
@@ -499,6 +523,7 @@ export interface ItemImageWhereInput {
   id_not_starts_with?: Maybe<ID_Input>;
   id_ends_with?: Maybe<ID_Input>;
   id_not_ends_with?: Maybe<ID_Input>;
+  item?: Maybe<ItemWhereInput>;
   main?: Maybe<String>;
   main_not?: Maybe<String>;
   main_in?: Maybe<String[] | String>;
@@ -710,6 +735,34 @@ export interface UserWhereInput {
   phone_not_starts_with?: Maybe<String>;
   phone_ends_with?: Maybe<String>;
   phone_not_ends_with?: Maybe<String>;
+  country?: Maybe<String>;
+  country_not?: Maybe<String>;
+  country_in?: Maybe<String[] | String>;
+  country_not_in?: Maybe<String[] | String>;
+  country_lt?: Maybe<String>;
+  country_lte?: Maybe<String>;
+  country_gt?: Maybe<String>;
+  country_gte?: Maybe<String>;
+  country_contains?: Maybe<String>;
+  country_not_contains?: Maybe<String>;
+  country_starts_with?: Maybe<String>;
+  country_not_starts_with?: Maybe<String>;
+  country_ends_with?: Maybe<String>;
+  country_not_ends_with?: Maybe<String>;
+  city?: Maybe<String>;
+  city_not?: Maybe<String>;
+  city_in?: Maybe<String[] | String>;
+  city_not_in?: Maybe<String[] | String>;
+  city_lt?: Maybe<String>;
+  city_lte?: Maybe<String>;
+  city_gt?: Maybe<String>;
+  city_gte?: Maybe<String>;
+  city_contains?: Maybe<String>;
+  city_not_contains?: Maybe<String>;
+  city_starts_with?: Maybe<String>;
+  city_not_starts_with?: Maybe<String>;
+  city_ends_with?: Maybe<String>;
+  city_not_ends_with?: Maybe<String>;
   company?: Maybe<CompanyWhereInput>;
   favoriteItems_every?: Maybe<ItemWhereInput>;
   favoriteItems_some?: Maybe<ItemWhereInput>;
@@ -736,6 +789,26 @@ export interface UserWhereInput {
   resetTokenExpiry_lte?: Maybe<Float>;
   resetTokenExpiry_gt?: Maybe<Float>;
   resetTokenExpiry_gte?: Maybe<Float>;
+  verifiedEmail?: Maybe<Boolean>;
+  verifiedEmail_not?: Maybe<Boolean>;
+  verifiedPhone?: Maybe<Boolean>;
+  verifiedPhone_not?: Maybe<Boolean>;
+  createdAt?: Maybe<DateTimeInput>;
+  createdAt_not?: Maybe<DateTimeInput>;
+  createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_lt?: Maybe<DateTimeInput>;
+  createdAt_lte?: Maybe<DateTimeInput>;
+  createdAt_gt?: Maybe<DateTimeInput>;
+  createdAt_gte?: Maybe<DateTimeInput>;
+  lastSeen?: Maybe<DateTimeInput>;
+  lastSeen_not?: Maybe<DateTimeInput>;
+  lastSeen_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  lastSeen_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  lastSeen_lt?: Maybe<DateTimeInput>;
+  lastSeen_lte?: Maybe<DateTimeInput>;
+  lastSeen_gt?: Maybe<DateTimeInput>;
+  lastSeen_gte?: Maybe<DateTimeInput>;
   AND?: Maybe<UserWhereInput[] | UserWhereInput>;
   OR?: Maybe<UserWhereInput[] | UserWhereInput>;
   NOT?: Maybe<UserWhereInput[] | UserWhereInput>;
@@ -864,6 +937,22 @@ export interface OrderWhereInput {
   totalPrice_lte?: Maybe<Int>;
   totalPrice_gt?: Maybe<Int>;
   totalPrice_gte?: Maybe<Int>;
+  createdAt?: Maybe<DateTimeInput>;
+  createdAt_not?: Maybe<DateTimeInput>;
+  createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_lt?: Maybe<DateTimeInput>;
+  createdAt_lte?: Maybe<DateTimeInput>;
+  createdAt_gt?: Maybe<DateTimeInput>;
+  createdAt_gte?: Maybe<DateTimeInput>;
+  updatedAt?: Maybe<DateTimeInput>;
+  updatedAt_not?: Maybe<DateTimeInput>;
+  updatedAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  updatedAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  updatedAt_lt?: Maybe<DateTimeInput>;
+  updatedAt_lte?: Maybe<DateTimeInput>;
+  updatedAt_gt?: Maybe<DateTimeInput>;
+  updatedAt_gte?: Maybe<DateTimeInput>;
   AND?: Maybe<OrderWhereInput[] | OrderWhereInput>;
   OR?: Maybe<OrderWhereInput[] | OrderWhereInput>;
   NOT?: Maybe<OrderWhereInput[] | OrderWhereInput>;
@@ -903,10 +992,15 @@ export interface UserCreateInput {
   lastName: String;
   role?: Maybe<UserCreateroleInput>;
   phone?: Maybe<String>;
+  country?: Maybe<String>;
+  city?: Maybe<String>;
   company?: Maybe<CompanyCreateOneWithoutMembersInput>;
   favoriteItems?: Maybe<ItemCreateManyInput>;
   resetToken?: Maybe<String>;
   resetTokenExpiry?: Maybe<Float>;
+  verifiedEmail?: Maybe<Boolean>;
+  verifiedPhone?: Maybe<Boolean>;
+  lastSeen: DateTimeInput;
 }
 
 export interface UserCreateroleInput {
@@ -943,16 +1037,19 @@ export interface ItemCreateWithoutOwnerInput {
   title: String;
   description: String;
   sku?: Maybe<String>;
-  image?: Maybe<ItemImageCreateManyInput>;
+  image?: Maybe<ItemImageCreateManyWithoutItemInput>;
   price: Int;
+  status?: Maybe<ItemStatus>;
 }
 
-export interface ItemImageCreateManyInput {
-  create?: Maybe<ItemImageCreateInput[] | ItemImageCreateInput>;
+export interface ItemImageCreateManyWithoutItemInput {
+  create?: Maybe<
+    ItemImageCreateWithoutItemInput[] | ItemImageCreateWithoutItemInput
+  >;
   connect?: Maybe<ItemImageWhereUniqueInput[] | ItemImageWhereUniqueInput>;
 }
 
-export interface ItemImageCreateInput {
+export interface ItemImageCreateWithoutItemInput {
   id?: Maybe<ID_Input>;
   main?: Maybe<String>;
   thumbnail?: Maybe<String>;
@@ -968,9 +1065,10 @@ export interface ItemCreateInput {
   title: String;
   description: String;
   sku?: Maybe<String>;
-  image?: Maybe<ItemImageCreateManyInput>;
+  image?: Maybe<ItemImageCreateManyWithoutItemInput>;
   price: Int;
   owner: CompanyCreateOneWithoutItemsInput;
+  status?: Maybe<ItemStatus>;
 }
 
 export interface CompanyCreateOneWithoutItemsInput {
@@ -1004,9 +1102,14 @@ export interface UserCreateWithoutCompanyInput {
   lastName: String;
   role?: Maybe<UserCreateroleInput>;
   phone?: Maybe<String>;
+  country?: Maybe<String>;
+  city?: Maybe<String>;
   favoriteItems?: Maybe<ItemCreateManyInput>;
   resetToken?: Maybe<String>;
   resetTokenExpiry?: Maybe<Float>;
+  verifiedEmail?: Maybe<Boolean>;
+  verifiedPhone?: Maybe<Boolean>;
+  lastSeen: DateTimeInput;
 }
 
 export interface CompanyUpdateInput {
@@ -1034,10 +1137,15 @@ export interface UserUpdateDataInput {
   lastName?: Maybe<String>;
   role?: Maybe<UserUpdateroleInput>;
   phone?: Maybe<String>;
+  country?: Maybe<String>;
+  city?: Maybe<String>;
   company?: Maybe<CompanyUpdateOneWithoutMembersInput>;
   favoriteItems?: Maybe<ItemUpdateManyInput>;
   resetToken?: Maybe<String>;
   resetTokenExpiry?: Maybe<Float>;
+  verifiedEmail?: Maybe<Boolean>;
+  verifiedPhone?: Maybe<Boolean>;
+  lastSeen?: Maybe<DateTimeInput>;
 }
 
 export interface UserUpdateroleInput {
@@ -1096,24 +1204,27 @@ export interface ItemUpdateWithoutOwnerDataInput {
   title?: Maybe<String>;
   description?: Maybe<String>;
   sku?: Maybe<String>;
-  image?: Maybe<ItemImageUpdateManyInput>;
+  image?: Maybe<ItemImageUpdateManyWithoutItemInput>;
   price?: Maybe<Int>;
+  status?: Maybe<ItemStatus>;
 }
 
-export interface ItemImageUpdateManyInput {
-  create?: Maybe<ItemImageCreateInput[] | ItemImageCreateInput>;
-  update?: Maybe<
-    | ItemImageUpdateWithWhereUniqueNestedInput[]
-    | ItemImageUpdateWithWhereUniqueNestedInput
-  >;
-  upsert?: Maybe<
-    | ItemImageUpsertWithWhereUniqueNestedInput[]
-    | ItemImageUpsertWithWhereUniqueNestedInput
+export interface ItemImageUpdateManyWithoutItemInput {
+  create?: Maybe<
+    ItemImageCreateWithoutItemInput[] | ItemImageCreateWithoutItemInput
   >;
   delete?: Maybe<ItemImageWhereUniqueInput[] | ItemImageWhereUniqueInput>;
   connect?: Maybe<ItemImageWhereUniqueInput[] | ItemImageWhereUniqueInput>;
   set?: Maybe<ItemImageWhereUniqueInput[] | ItemImageWhereUniqueInput>;
   disconnect?: Maybe<ItemImageWhereUniqueInput[] | ItemImageWhereUniqueInput>;
+  update?: Maybe<
+    | ItemImageUpdateWithWhereUniqueWithoutItemInput[]
+    | ItemImageUpdateWithWhereUniqueWithoutItemInput
+  >;
+  upsert?: Maybe<
+    | ItemImageUpsertWithWhereUniqueWithoutItemInput[]
+    | ItemImageUpsertWithWhereUniqueWithoutItemInput
+  >;
   deleteMany?: Maybe<ItemImageScalarWhereInput[] | ItemImageScalarWhereInput>;
   updateMany?: Maybe<
     | ItemImageUpdateManyWithWhereNestedInput[]
@@ -1121,20 +1232,20 @@ export interface ItemImageUpdateManyInput {
   >;
 }
 
-export interface ItemImageUpdateWithWhereUniqueNestedInput {
+export interface ItemImageUpdateWithWhereUniqueWithoutItemInput {
   where: ItemImageWhereUniqueInput;
-  data: ItemImageUpdateDataInput;
+  data: ItemImageUpdateWithoutItemDataInput;
 }
 
-export interface ItemImageUpdateDataInput {
+export interface ItemImageUpdateWithoutItemDataInput {
   main?: Maybe<String>;
   thumbnail?: Maybe<String>;
 }
 
-export interface ItemImageUpsertWithWhereUniqueNestedInput {
+export interface ItemImageUpsertWithWhereUniqueWithoutItemInput {
   where: ItemImageWhereUniqueInput;
-  update: ItemImageUpdateDataInput;
-  create: ItemImageCreateInput;
+  update: ItemImageUpdateWithoutItemDataInput;
+  create: ItemImageCreateWithoutItemInput;
 }
 
 export interface ItemImageScalarWhereInput {
@@ -1266,6 +1377,10 @@ export interface ItemScalarWhereInput {
   price_lte?: Maybe<Int>;
   price_gt?: Maybe<Int>;
   price_gte?: Maybe<Int>;
+  status?: Maybe<ItemStatus>;
+  status_not?: Maybe<ItemStatus>;
+  status_in?: Maybe<ItemStatus[] | ItemStatus>;
+  status_not_in?: Maybe<ItemStatus[] | ItemStatus>;
   createdAt?: Maybe<DateTimeInput>;
   createdAt_not?: Maybe<DateTimeInput>;
   createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
@@ -1297,6 +1412,7 @@ export interface ItemUpdateManyDataInput {
   description?: Maybe<String>;
   sku?: Maybe<String>;
   price?: Maybe<Int>;
+  status?: Maybe<ItemStatus>;
 }
 
 export interface CompanyUpsertWithoutMembersInput {
@@ -1333,9 +1449,10 @@ export interface ItemUpdateDataInput {
   title?: Maybe<String>;
   description?: Maybe<String>;
   sku?: Maybe<String>;
-  image?: Maybe<ItemImageUpdateManyInput>;
+  image?: Maybe<ItemImageUpdateManyWithoutItemInput>;
   price?: Maybe<Int>;
   owner?: Maybe<CompanyUpdateOneRequiredWithoutItemsInput>;
+  status?: Maybe<ItemStatus>;
 }
 
 export interface CompanyUpdateOneRequiredWithoutItemsInput {
@@ -1389,9 +1506,14 @@ export interface UserUpdateWithoutCompanyDataInput {
   lastName?: Maybe<String>;
   role?: Maybe<UserUpdateroleInput>;
   phone?: Maybe<String>;
+  country?: Maybe<String>;
+  city?: Maybe<String>;
   favoriteItems?: Maybe<ItemUpdateManyInput>;
   resetToken?: Maybe<String>;
   resetTokenExpiry?: Maybe<Float>;
+  verifiedEmail?: Maybe<Boolean>;
+  verifiedPhone?: Maybe<Boolean>;
+  lastSeen?: Maybe<DateTimeInput>;
 }
 
 export interface UserUpsertWithWhereUniqueWithoutCompanyInput {
@@ -1485,6 +1607,34 @@ export interface UserScalarWhereInput {
   phone_not_starts_with?: Maybe<String>;
   phone_ends_with?: Maybe<String>;
   phone_not_ends_with?: Maybe<String>;
+  country?: Maybe<String>;
+  country_not?: Maybe<String>;
+  country_in?: Maybe<String[] | String>;
+  country_not_in?: Maybe<String[] | String>;
+  country_lt?: Maybe<String>;
+  country_lte?: Maybe<String>;
+  country_gt?: Maybe<String>;
+  country_gte?: Maybe<String>;
+  country_contains?: Maybe<String>;
+  country_not_contains?: Maybe<String>;
+  country_starts_with?: Maybe<String>;
+  country_not_starts_with?: Maybe<String>;
+  country_ends_with?: Maybe<String>;
+  country_not_ends_with?: Maybe<String>;
+  city?: Maybe<String>;
+  city_not?: Maybe<String>;
+  city_in?: Maybe<String[] | String>;
+  city_not_in?: Maybe<String[] | String>;
+  city_lt?: Maybe<String>;
+  city_lte?: Maybe<String>;
+  city_gt?: Maybe<String>;
+  city_gte?: Maybe<String>;
+  city_contains?: Maybe<String>;
+  city_not_contains?: Maybe<String>;
+  city_starts_with?: Maybe<String>;
+  city_not_starts_with?: Maybe<String>;
+  city_ends_with?: Maybe<String>;
+  city_not_ends_with?: Maybe<String>;
   resetToken?: Maybe<String>;
   resetToken_not?: Maybe<String>;
   resetToken_in?: Maybe<String[] | String>;
@@ -1507,6 +1657,26 @@ export interface UserScalarWhereInput {
   resetTokenExpiry_lte?: Maybe<Float>;
   resetTokenExpiry_gt?: Maybe<Float>;
   resetTokenExpiry_gte?: Maybe<Float>;
+  verifiedEmail?: Maybe<Boolean>;
+  verifiedEmail_not?: Maybe<Boolean>;
+  verifiedPhone?: Maybe<Boolean>;
+  verifiedPhone_not?: Maybe<Boolean>;
+  createdAt?: Maybe<DateTimeInput>;
+  createdAt_not?: Maybe<DateTimeInput>;
+  createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_lt?: Maybe<DateTimeInput>;
+  createdAt_lte?: Maybe<DateTimeInput>;
+  createdAt_gt?: Maybe<DateTimeInput>;
+  createdAt_gte?: Maybe<DateTimeInput>;
+  lastSeen?: Maybe<DateTimeInput>;
+  lastSeen_not?: Maybe<DateTimeInput>;
+  lastSeen_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  lastSeen_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  lastSeen_lt?: Maybe<DateTimeInput>;
+  lastSeen_lte?: Maybe<DateTimeInput>;
+  lastSeen_gt?: Maybe<DateTimeInput>;
+  lastSeen_gte?: Maybe<DateTimeInput>;
   AND?: Maybe<UserScalarWhereInput[] | UserScalarWhereInput>;
   OR?: Maybe<UserScalarWhereInput[] | UserScalarWhereInput>;
   NOT?: Maybe<UserScalarWhereInput[] | UserScalarWhereInput>;
@@ -1524,8 +1694,13 @@ export interface UserUpdateManyDataInput {
   lastName?: Maybe<String>;
   role?: Maybe<UserUpdateroleInput>;
   phone?: Maybe<String>;
+  country?: Maybe<String>;
+  city?: Maybe<String>;
   resetToken?: Maybe<String>;
   resetTokenExpiry?: Maybe<Float>;
+  verifiedEmail?: Maybe<Boolean>;
+  verifiedPhone?: Maybe<Boolean>;
+  lastSeen?: Maybe<DateTimeInput>;
 }
 
 export interface CompanyUpsertWithoutItemsInput {
@@ -1556,9 +1731,10 @@ export interface ItemUpdateInput {
   title?: Maybe<String>;
   description?: Maybe<String>;
   sku?: Maybe<String>;
-  image?: Maybe<ItemImageUpdateManyInput>;
+  image?: Maybe<ItemImageUpdateManyWithoutItemInput>;
   price?: Maybe<Int>;
   owner?: Maybe<CompanyUpdateOneRequiredWithoutItemsInput>;
+  status?: Maybe<ItemStatus>;
 }
 
 export interface ItemUpdateManyMutationInput {
@@ -1566,11 +1742,56 @@ export interface ItemUpdateManyMutationInput {
   description?: Maybe<String>;
   sku?: Maybe<String>;
   price?: Maybe<Int>;
+  status?: Maybe<ItemStatus>;
+}
+
+export interface ItemImageCreateInput {
+  id?: Maybe<ID_Input>;
+  item: ItemCreateOneWithoutImageInput;
+  main?: Maybe<String>;
+  thumbnail?: Maybe<String>;
+}
+
+export interface ItemCreateOneWithoutImageInput {
+  create?: Maybe<ItemCreateWithoutImageInput>;
+  connect?: Maybe<ItemWhereUniqueInput>;
+}
+
+export interface ItemCreateWithoutImageInput {
+  id?: Maybe<ID_Input>;
+  title: String;
+  description: String;
+  sku?: Maybe<String>;
+  price: Int;
+  owner: CompanyCreateOneWithoutItemsInput;
+  status?: Maybe<ItemStatus>;
 }
 
 export interface ItemImageUpdateInput {
+  item?: Maybe<ItemUpdateOneRequiredWithoutImageInput>;
   main?: Maybe<String>;
   thumbnail?: Maybe<String>;
+}
+
+export interface ItemUpdateOneRequiredWithoutImageInput {
+  create?: Maybe<ItemCreateWithoutImageInput>;
+  update?: Maybe<ItemUpdateWithoutImageDataInput>;
+  upsert?: Maybe<ItemUpsertWithoutImageInput>;
+  connect?: Maybe<ItemWhereUniqueInput>;
+}
+
+export interface ItemUpdateWithoutImageDataInput {
+  title?: Maybe<String>;
+  description?: Maybe<String>;
+  sku?: Maybe<String>;
+  price?: Maybe<Int>;
+  owner?: Maybe<CompanyUpdateOneRequiredWithoutItemsInput>;
+  status?: Maybe<ItemStatus>;
+}
+
+export interface ItemUpsertWithoutImageInput {
+  update: ItemUpdateWithoutImageDataInput;
+  create: ItemCreateWithoutImageInput;
 }
 
 export interface ItemImageUpdateManyMutationInput {
@@ -1799,10 +2020,15 @@ export interface UserUpdateInput {
   lastName?: Maybe<String>;
   role?: Maybe<UserUpdateroleInput>;
   phone?: Maybe<String>;
+  country?: Maybe<String>;
+  city?: Maybe<String>;
   company?: Maybe<CompanyUpdateOneWithoutMembersInput>;
   favoriteItems?: Maybe<ItemUpdateManyInput>;
   resetToken?: Maybe<String>;
   resetTokenExpiry?: Maybe<Float>;
+  verifiedEmail?: Maybe<Boolean>;
+  verifiedPhone?: Maybe<Boolean>;
+  lastSeen?: Maybe<DateTimeInput>;
 }
 
 export interface UserUpdateManyMutationInput {
@@ -1812,8 +2038,13 @@ export interface UserUpdateManyMutationInput {
   lastName?: Maybe<String>;
   role?: Maybe<UserUpdateroleInput>;
   phone?: Maybe<String>;
+  country?: Maybe<String>;
+  city?: Maybe<String>;
   resetToken?: Maybe<String>;
   resetTokenExpiry?: Maybe<Float>;
+  verifiedEmail?: Maybe<Boolean>;
+  verifiedPhone?: Maybe<Boolean>;
+  lastSeen?: Maybe<DateTimeInput>;
 }
 
 export interface CompanySubscriptionWhereInput {
@@ -2011,8 +2242,14 @@ export interface User {
   lastName: String;
   role: UserRole[];
   phone?: String;
+  country?: String;
+  city?: String;
   resetToken?: String;
   resetTokenExpiry?: Float;
+  verifiedEmail: Boolean;
+  verifiedPhone: Boolean;
+  createdAt: DateTimeOutput;
+  lastSeen: DateTimeOutput;
 }
 
 export interface UserPromise extends Promise<User>, Fragmentable {
@@ -2023,6 +2260,8 @@ export interface UserPromise extends Promise<User>, Fragmentable {
   lastName: () => Promise<String>;
   role: () => Promise<UserRole[]>;
   phone: () => Promise<String>;
+  country: () => Promise<String>;
+  city: () => Promise<String>;
   company: <T = CompanyPromise>() => T;
   favoriteItems: <T = FragmentableArray<Item>>(args?: {
     where?: ItemWhereInput;
@@ -2035,6 +2274,10 @@ export interface UserPromise extends Promise<User>, Fragmentable {
   }) => T;
   resetToken: () => Promise<String>;
   resetTokenExpiry: () => Promise<Float>;
+  verifiedEmail: () => Promise<Boolean>;
+  verifiedPhone: () => Promise<Boolean>;
+  createdAt: () => Promise<DateTimeOutput>;
+  lastSeen: () => Promise<DateTimeOutput>;
 }
 
 export interface UserSubscription
@@ -2047,6 +2290,8 @@ export interface UserSubscription
   lastName: () => Promise<AsyncIterator<String>>;
   role: () => Promise<AsyncIterator<UserRole[]>>;
   phone: () => Promise<AsyncIterator<String>>;
+  country: () => Promise<AsyncIterator<String>>;
+  city: () => Promise<AsyncIterator<String>>;
   company: <T = CompanySubscription>() => T;
   favoriteItems: <T = Promise<AsyncIterator<ItemSubscription>>>(args?: {
     where?: ItemWhereInput;
@@ -2059,6 +2304,10 @@ export interface UserSubscription
   }) => T;
   resetToken: () => Promise<AsyncIterator<String>>;
   resetTokenExpiry: () => Promise<AsyncIterator<Float>>;
+  verifiedEmail: () => Promise<AsyncIterator<Boolean>>;
+  verifiedPhone: () => Promise<AsyncIterator<Boolean>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  lastSeen: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
 export interface UserNullablePromise
@@ -2071,6 +2320,8 @@ export interface UserNullablePromise
   lastName: () => Promise<String>;
   role: () => Promise<UserRole[]>;
   phone: () => Promise<String>;
+  country: () => Promise<String>;
+  city: () => Promise<String>;
   company: <T = CompanyPromise>() => T;
   favoriteItems: <T = FragmentableArray<Item>>(args?: {
     where?: ItemWhereInput;
@@ -2083,6 +2334,10 @@ export interface UserNullablePromise
   }) => T;
   resetToken: () => Promise<String>;
   resetTokenExpiry: () => Promise<Float>;
+  verifiedEmail: () => Promise<Boolean>;
+  verifiedPhone: () => Promise<Boolean>;
+  createdAt: () => Promise<DateTimeOutput>;
+  lastSeen: () => Promise<DateTimeOutput>;
 }
 
 export interface Item {
@@ -2091,6 +2346,7 @@ export interface Item {
   description: String;
   sku?: String;
   price: Int;
+  status: ItemStatus;
   createdAt: DateTimeOutput;
   updatedAt: DateTimeOutput;
 }
@@ -2111,6 +2367,7 @@ export interface ItemPromise extends Promise<Item>, Fragmentable {
   }) => T;
   price: () => Promise<Int>;
   owner: <T = CompanyPromise>() => T;
+  status: () => Promise<ItemStatus>;
   createdAt: () => Promise<DateTimeOutput>;
   updatedAt: () => Promise<DateTimeOutput>;
 }
@@ -2133,6 +2390,7 @@ export interface ItemSubscription
   }) => T;
   price: () => Promise<AsyncIterator<Int>>;
   owner: <T = CompanySubscription>() => T;
+  status: () => Promise<AsyncIterator<ItemStatus>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
@@ -2155,6 +2413,7 @@ export interface ItemNullablePromise
   }) => T;
   price: () => Promise<Int>;
   owner: <T = CompanyPromise>() => T;
+  status: () => Promise<ItemStatus>;
   createdAt: () => Promise<DateTimeOutput>;
   updatedAt: () => Promise<DateTimeOutput>;
 }
@@ -2167,6 +2426,7 @@ export interface ItemImage {
 
 export interface ItemImagePromise extends Promise<ItemImage>, Fragmentable {
   id: () => Promise<ID_Output>;
+  item: <T = ItemPromise>() => T;
   main: () => Promise<String>;
   thumbnail: () => Promise<String>;
 }
@@ -2175,6 +2435,7 @@ export interface ItemImageSubscription
   extends Promise<AsyncIterator<ItemImage>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
+  item: <T = ItemSubscription>() => T;
   main: () => Promise<AsyncIterator<String>>;
   thumbnail: () => Promise<AsyncIterator<String>>;
 }
@@ -2183,6 +2444,7 @@ export interface ItemImageNullablePromise
   extends Promise<ItemImage | null>,
     Fragmentable {
   id: () => Promise<ID_Output>;
+  item: <T = ItemPromise>() => T;
   main: () => Promise<String>;
   thumbnail: () => Promise<String>;
 }
@@ -2378,6 +2640,8 @@ export interface Order {
   id: ID_Output;
   status: OrderStatus;
   totalPrice: Int;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
 }
 
 export interface OrderPromise extends Promise<Order>, Fragmentable {
@@ -2395,6 +2659,8 @@ export interface OrderPromise extends Promise<Order>, Fragmentable {
   supplier: <T = CompanyPromise>() => T;
   buyer: <T = UserPromise>() => T;
   totalPrice: () => Promise<Int>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
 }
 
 export interface OrderSubscription
@@ -2414,6 +2680,8 @@ export interface OrderSubscription
   supplier: <T = CompanySubscription>() => T;
   buyer: <T = UserSubscription>() => T;
   totalPrice: () => Promise<AsyncIterator<Int>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
 export interface OrderNullablePromise
@@ -2433,6 +2701,8 @@ export interface OrderNullablePromise
   supplier: <T = CompanyPromise>() => T;
   buyer: <T = UserPromise>() => T;
   totalPrice: () => Promise<Int>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
 }
 
 export interface OrderItem {
@@ -2751,6 +3021,7 @@ export interface ItemPreviousValues {
   description: String;
   sku?: String;
   price: Int;
+  status: ItemStatus;
   createdAt: DateTimeOutput;
   updatedAt: DateTimeOutput;
 }
@@ -2763,6 +3034,7 @@ export interface ItemPreviousValuesPromise
   description: () => Promise<String>;
   sku: () => Promise<String>;
   price: () => Promise<Int>;
+  status: () => Promise<ItemStatus>;
   createdAt: () => Promise<DateTimeOutput>;
   updatedAt: () => Promise<DateTimeOutput>;
 }
@@ -2775,6 +3047,7 @@ export interface ItemPreviousValuesSubscription
   description: () => Promise<AsyncIterator<String>>;
   sku: () => Promise<AsyncIterator<String>>;
   price: () => Promise<AsyncIterator<Int>>;
+  status: () => Promise<AsyncIterator<ItemStatus>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
@@ -2855,6 +3128,8 @@ export interface OrderPreviousValues {
   id: ID_Output;
   status: OrderStatus;
   totalPrice: Int;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
 }
 
 export interface OrderPreviousValuesPromise
@@ -2863,6 +3138,8 @@ export interface OrderPreviousValuesPromise
   id: () => Promise<ID_Output>;
   status: () => Promise<OrderStatus>;
   totalPrice: () => Promise<Int>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
 }
 
 export interface OrderPreviousValuesSubscription
@@ -2871,6 +3148,8 @@ export interface OrderPreviousValuesSubscription
   id: () => Promise<AsyncIterator<ID_Output>>;
   status: () => Promise<AsyncIterator<OrderStatus>>;
   totalPrice: () => Promise<AsyncIterator<Int>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
 export interface OrderItemSubscriptionPayload {
@@ -2962,8 +3241,14 @@ export interface UserPreviousValues {
   lastName: String;
   role: UserRole[];
   phone?: String;
+  country?: String;
+  city?: String;
   resetToken?: String;
   resetTokenExpiry?: Float;
+  verifiedEmail: Boolean;
+  verifiedPhone: Boolean;
+  createdAt: DateTimeOutput;
+  lastSeen: DateTimeOutput;
 }
 
 export interface UserPreviousValuesPromise
@@ -2976,8 +3261,14 @@ export interface UserPreviousValuesPromise
   lastName: () => Promise<String>;
   role: () => Promise<UserRole[]>;
   phone: () => Promise<String>;
+  country: () => Promise<String>;
+  city: () => Promise<String>;
   resetToken: () => Promise<String>;
   resetTokenExpiry: () => Promise<Float>;
+  verifiedEmail: () => Promise<Boolean>;
+  verifiedPhone: () => Promise<Boolean>;
+  createdAt: () => Promise<DateTimeOutput>;
+  lastSeen: () => Promise<DateTimeOutput>;
 }
 
 export interface UserPreviousValuesSubscription
@@ -2990,8 +3281,14 @@ export interface UserPreviousValuesSubscription
   lastName: () => Promise<AsyncIterator<String>>;
   role: () => Promise<AsyncIterator<UserRole[]>>;
   phone: () => Promise<AsyncIterator<String>>;
+  country: () => Promise<AsyncIterator<String>>;
+  city: () => Promise<AsyncIterator<String>>;
   resetToken: () => Promise<AsyncIterator<String>>;
   resetTokenExpiry: () => Promise<AsyncIterator<Float>>;
+  verifiedEmail: () => Promise<AsyncIterator<Boolean>>;
+  verifiedPhone: () => Promise<AsyncIterator<Boolean>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  lastSeen: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
 /*
@@ -3016,6 +3313,11 @@ The `Float` scalar type represents signed double-precision fractional values as 
 export type Float = number;
 
 /*
+The `Boolean` scalar type represents `true` or `false`.
+*/
+export type Boolean = boolean;
+
+/*
 DateTime scalar input type, allowing Date
 */
 export type DateTimeInput = Date | string;
@@ -3024,11 +3326,6 @@ export type DateTimeInput = Date | string;
 DateTime scalar output type, which is always a string
 */
 export type DateTimeOutput = string;
-
-/*
-The `Boolean` scalar type represents `true` or `false`.
-*/
-export type Boolean = boolean;
 
 export type Long = string;
 
@@ -3043,6 +3340,10 @@ export const models: Model[] = [
   },
   {
     name: "CompanyRole",
+    embedded: false
+  },
+  {
+    name: "ItemStatus",
     embedded: false
   },
   {

@@ -360,6 +360,7 @@ type Item {
   image(where: ItemImageWhereInput, orderBy: ItemImageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ItemImage!]
   price: Int!
   owner: Company!
+  status: ItemStatus!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -375,9 +376,10 @@ input ItemCreateInput {
   title: String!
   description: String!
   sku: String
-  image: ItemImageCreateManyInput
+  image: ItemImageCreateManyWithoutItemInput
   price: Int!
   owner: CompanyCreateOneWithoutItemsInput!
+  status: ItemStatus
 }
 
 input ItemCreateManyInput {
@@ -390,13 +392,29 @@ input ItemCreateManyWithoutOwnerInput {
   connect: [ItemWhereUniqueInput!]
 }
 
+input ItemCreateOneWithoutImageInput {
+  create: ItemCreateWithoutImageInput
+  connect: ItemWhereUniqueInput
+}
+
+input ItemCreateWithoutImageInput {
+  id: ID
+  title: String!
+  description: String!
+  sku: String
+  price: Int!
+  owner: CompanyCreateOneWithoutItemsInput!
+  status: ItemStatus
+}
+
 input ItemCreateWithoutOwnerInput {
   id: ID
   title: String!
   description: String!
   sku: String
-  image: ItemImageCreateManyInput
+  image: ItemImageCreateManyWithoutItemInput
   price: Int!
+  status: ItemStatus
 }
 
 type ItemEdge {
@@ -406,6 +424,7 @@ type ItemEdge {
 
 type ItemImage {
   id: ID!
+  item: Item!
   main: String
   thumbnail: String
 }
@@ -418,13 +437,20 @@ type ItemImageConnection {
 
 input ItemImageCreateInput {
   id: ID
+  item: ItemCreateOneWithoutImageInput!
   main: String
   thumbnail: String
 }
 
-input ItemImageCreateManyInput {
-  create: [ItemImageCreateInput!]
+input ItemImageCreateManyWithoutItemInput {
+  create: [ItemImageCreateWithoutItemInput!]
   connect: [ItemImageWhereUniqueInput!]
+}
+
+input ItemImageCreateWithoutItemInput {
+  id: ID
+  main: String
+  thumbnail: String
 }
 
 type ItemImageEdge {
@@ -513,12 +539,8 @@ input ItemImageSubscriptionWhereInput {
   NOT: [ItemImageSubscriptionWhereInput!]
 }
 
-input ItemImageUpdateDataInput {
-  main: String
-  thumbnail: String
-}
-
 input ItemImageUpdateInput {
+  item: ItemUpdateOneRequiredWithoutImageInput
   main: String
   thumbnail: String
 }
@@ -528,21 +550,21 @@ input ItemImageUpdateManyDataInput {
   thumbnail: String
 }
 
-input ItemImageUpdateManyInput {
-  create: [ItemImageCreateInput!]
-  update: [ItemImageUpdateWithWhereUniqueNestedInput!]
-  upsert: [ItemImageUpsertWithWhereUniqueNestedInput!]
+input ItemImageUpdateManyMutationInput {
+  main: String
+  thumbnail: String
+}
+
+input ItemImageUpdateManyWithoutItemInput {
+  create: [ItemImageCreateWithoutItemInput!]
   delete: [ItemImageWhereUniqueInput!]
   connect: [ItemImageWhereUniqueInput!]
   set: [ItemImageWhereUniqueInput!]
   disconnect: [ItemImageWhereUniqueInput!]
+  update: [ItemImageUpdateWithWhereUniqueWithoutItemInput!]
+  upsert: [ItemImageUpsertWithWhereUniqueWithoutItemInput!]
   deleteMany: [ItemImageScalarWhereInput!]
   updateMany: [ItemImageUpdateManyWithWhereNestedInput!]
-}
-
-input ItemImageUpdateManyMutationInput {
-  main: String
-  thumbnail: String
 }
 
 input ItemImageUpdateManyWithWhereNestedInput {
@@ -550,15 +572,20 @@ input ItemImageUpdateManyWithWhereNestedInput {
   data: ItemImageUpdateManyDataInput!
 }
 
-input ItemImageUpdateWithWhereUniqueNestedInput {
-  where: ItemImageWhereUniqueInput!
-  data: ItemImageUpdateDataInput!
+input ItemImageUpdateWithoutItemDataInput {
+  main: String
+  thumbnail: String
 }
 
-input ItemImageUpsertWithWhereUniqueNestedInput {
+input ItemImageUpdateWithWhereUniqueWithoutItemInput {
   where: ItemImageWhereUniqueInput!
-  update: ItemImageUpdateDataInput!
-  create: ItemImageCreateInput!
+  data: ItemImageUpdateWithoutItemDataInput!
+}
+
+input ItemImageUpsertWithWhereUniqueWithoutItemInput {
+  where: ItemImageWhereUniqueInput!
+  update: ItemImageUpdateWithoutItemDataInput!
+  create: ItemImageCreateWithoutItemInput!
 }
 
 input ItemImageWhereInput {
@@ -576,6 +603,7 @@ input ItemImageWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
+  item: ItemWhereInput
   main: String
   main_not: String
   main_in: [String!]
@@ -624,6 +652,8 @@ enum ItemOrderByInput {
   sku_DESC
   price_ASC
   price_DESC
+  status_ASC
+  status_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -636,6 +666,7 @@ type ItemPreviousValues {
   description: String!
   sku: String
   price: Int!
+  status: ItemStatus!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -705,6 +736,10 @@ input ItemScalarWhereInput {
   price_lte: Int
   price_gt: Int
   price_gte: Int
+  status: ItemStatus
+  status_not: ItemStatus
+  status_in: [ItemStatus!]
+  status_not_in: [ItemStatus!]
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -724,6 +759,11 @@ input ItemScalarWhereInput {
   AND: [ItemScalarWhereInput!]
   OR: [ItemScalarWhereInput!]
   NOT: [ItemScalarWhereInput!]
+}
+
+enum ItemStatus {
+  PRIVATE
+  PUBLIC
 }
 
 type ItemSubscriptionPayload {
@@ -748,18 +788,20 @@ input ItemUpdateDataInput {
   title: String
   description: String
   sku: String
-  image: ItemImageUpdateManyInput
+  image: ItemImageUpdateManyWithoutItemInput
   price: Int
   owner: CompanyUpdateOneRequiredWithoutItemsInput
+  status: ItemStatus
 }
 
 input ItemUpdateInput {
   title: String
   description: String
   sku: String
-  image: ItemImageUpdateManyInput
+  image: ItemImageUpdateManyWithoutItemInput
   price: Int
   owner: CompanyUpdateOneRequiredWithoutItemsInput
+  status: ItemStatus
 }
 
 input ItemUpdateManyDataInput {
@@ -767,6 +809,7 @@ input ItemUpdateManyDataInput {
   description: String
   sku: String
   price: Int
+  status: ItemStatus
 }
 
 input ItemUpdateManyInput {
@@ -786,6 +829,7 @@ input ItemUpdateManyMutationInput {
   description: String
   sku: String
   price: Int
+  status: ItemStatus
 }
 
 input ItemUpdateManyWithoutOwnerInput {
@@ -805,12 +849,29 @@ input ItemUpdateManyWithWhereNestedInput {
   data: ItemUpdateManyDataInput!
 }
 
+input ItemUpdateOneRequiredWithoutImageInput {
+  create: ItemCreateWithoutImageInput
+  update: ItemUpdateWithoutImageDataInput
+  upsert: ItemUpsertWithoutImageInput
+  connect: ItemWhereUniqueInput
+}
+
+input ItemUpdateWithoutImageDataInput {
+  title: String
+  description: String
+  sku: String
+  price: Int
+  owner: CompanyUpdateOneRequiredWithoutItemsInput
+  status: ItemStatus
+}
+
 input ItemUpdateWithoutOwnerDataInput {
   title: String
   description: String
   sku: String
-  image: ItemImageUpdateManyInput
+  image: ItemImageUpdateManyWithoutItemInput
   price: Int
+  status: ItemStatus
 }
 
 input ItemUpdateWithWhereUniqueNestedInput {
@@ -821,6 +882,11 @@ input ItemUpdateWithWhereUniqueNestedInput {
 input ItemUpdateWithWhereUniqueWithoutOwnerInput {
   where: ItemWhereUniqueInput!
   data: ItemUpdateWithoutOwnerDataInput!
+}
+
+input ItemUpsertWithoutImageInput {
+  update: ItemUpdateWithoutImageDataInput!
+  create: ItemCreateWithoutImageInput!
 }
 
 input ItemUpsertWithWhereUniqueNestedInput {
@@ -904,6 +970,10 @@ input ItemWhereInput {
   price_gt: Int
   price_gte: Int
   owner: CompanyWhereInput
+  status: ItemStatus
+  status_not: ItemStatus
+  status_in: [ItemStatus!]
+  status_not_in: [ItemStatus!]
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -987,6 +1057,8 @@ type Order {
   supplier: Company!
   buyer: User!
   totalPrice: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type OrderConnection {
@@ -1317,12 +1389,18 @@ enum OrderOrderByInput {
   status_DESC
   totalPrice_ASC
   totalPrice_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
 }
 
 type OrderPreviousValues {
   id: ID!
   status: OrderStatus!
   totalPrice: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 enum OrderStatus {
@@ -1396,6 +1474,22 @@ input OrderWhereInput {
   totalPrice_lte: Int
   totalPrice_gt: Int
   totalPrice_gte: Int
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
   AND: [OrderWhereInput!]
   OR: [OrderWhereInput!]
   NOT: [OrderWhereInput!]
@@ -1451,10 +1545,16 @@ type User {
   lastName: String!
   role: [UserRole!]!
   phone: String
+  country: String
+  city: String
   company: Company
   favoriteItems(where: ItemWhereInput, orderBy: ItemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Item!]
   resetToken: String
   resetTokenExpiry: Float
+  verifiedEmail: Boolean!
+  verifiedPhone: Boolean!
+  createdAt: DateTime!
+  lastSeen: DateTime!
 }
 
 type UserConnection {
@@ -1471,10 +1571,15 @@ input UserCreateInput {
   lastName: String!
   role: UserCreateroleInput
   phone: String
+  country: String
+  city: String
   company: CompanyCreateOneWithoutMembersInput
   favoriteItems: ItemCreateManyInput
   resetToken: String
   resetTokenExpiry: Float
+  verifiedEmail: Boolean
+  verifiedPhone: Boolean
+  lastSeen: DateTime!
 }
 
 input UserCreateManyWithoutCompanyInput {
@@ -1499,9 +1604,14 @@ input UserCreateWithoutCompanyInput {
   lastName: String!
   role: UserCreateroleInput
   phone: String
+  country: String
+  city: String
   favoriteItems: ItemCreateManyInput
   resetToken: String
   resetTokenExpiry: Float
+  verifiedEmail: Boolean
+  verifiedPhone: Boolean
+  lastSeen: DateTime!
 }
 
 type UserEdge {
@@ -1522,10 +1632,22 @@ enum UserOrderByInput {
   lastName_DESC
   phone_ASC
   phone_DESC
+  country_ASC
+  country_DESC
+  city_ASC
+  city_DESC
   resetToken_ASC
   resetToken_DESC
   resetTokenExpiry_ASC
   resetTokenExpiry_DESC
+  verifiedEmail_ASC
+  verifiedEmail_DESC
+  verifiedPhone_ASC
+  verifiedPhone_DESC
+  createdAt_ASC
+  createdAt_DESC
+  lastSeen_ASC
+  lastSeen_DESC
 }
 
 type UserPreviousValues {
@@ -1536,14 +1658,20 @@ type UserPreviousValues {
   lastName: String!
   role: [UserRole!]!
   phone: String
+  country: String
+  city: String
   resetToken: String
   resetTokenExpiry: Float
+  verifiedEmail: Boolean!
+  verifiedPhone: Boolean!
+  createdAt: DateTime!
+  lastSeen: DateTime!
 }
 
 enum UserRole {
-  MODERATOR
-  SUPPLIER
-  BUYER
+  APP_MODERATOR
+  COMPANY_ADMIN
+  COMPANY_MANAGER
 }
 
 input UserScalarWhereInput {
@@ -1631,6 +1759,34 @@ input UserScalarWhereInput {
   phone_not_starts_with: String
   phone_ends_with: String
   phone_not_ends_with: String
+  country: String
+  country_not: String
+  country_in: [String!]
+  country_not_in: [String!]
+  country_lt: String
+  country_lte: String
+  country_gt: String
+  country_gte: String
+  country_contains: String
+  country_not_contains: String
+  country_starts_with: String
+  country_not_starts_with: String
+  country_ends_with: String
+  country_not_ends_with: String
+  city: String
+  city_not: String
+  city_in: [String!]
+  city_not_in: [String!]
+  city_lt: String
+  city_lte: String
+  city_gt: String
+  city_gte: String
+  city_contains: String
+  city_not_contains: String
+  city_starts_with: String
+  city_not_starts_with: String
+  city_ends_with: String
+  city_not_ends_with: String
   resetToken: String
   resetToken_not: String
   resetToken_in: [String!]
@@ -1653,6 +1809,26 @@ input UserScalarWhereInput {
   resetTokenExpiry_lte: Float
   resetTokenExpiry_gt: Float
   resetTokenExpiry_gte: Float
+  verifiedEmail: Boolean
+  verifiedEmail_not: Boolean
+  verifiedPhone: Boolean
+  verifiedPhone_not: Boolean
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  lastSeen: DateTime
+  lastSeen_not: DateTime
+  lastSeen_in: [DateTime!]
+  lastSeen_not_in: [DateTime!]
+  lastSeen_lt: DateTime
+  lastSeen_lte: DateTime
+  lastSeen_gt: DateTime
+  lastSeen_gte: DateTime
   AND: [UserScalarWhereInput!]
   OR: [UserScalarWhereInput!]
   NOT: [UserScalarWhereInput!]
@@ -1683,10 +1859,15 @@ input UserUpdateDataInput {
   lastName: String
   role: UserUpdateroleInput
   phone: String
+  country: String
+  city: String
   company: CompanyUpdateOneWithoutMembersInput
   favoriteItems: ItemUpdateManyInput
   resetToken: String
   resetTokenExpiry: Float
+  verifiedEmail: Boolean
+  verifiedPhone: Boolean
+  lastSeen: DateTime
 }
 
 input UserUpdateInput {
@@ -1696,10 +1877,15 @@ input UserUpdateInput {
   lastName: String
   role: UserUpdateroleInput
   phone: String
+  country: String
+  city: String
   company: CompanyUpdateOneWithoutMembersInput
   favoriteItems: ItemUpdateManyInput
   resetToken: String
   resetTokenExpiry: Float
+  verifiedEmail: Boolean
+  verifiedPhone: Boolean
+  lastSeen: DateTime
 }
 
 input UserUpdateManyDataInput {
@@ -1709,8 +1895,13 @@ input UserUpdateManyDataInput {
   lastName: String
   role: UserUpdateroleInput
   phone: String
+  country: String
+  city: String
   resetToken: String
   resetTokenExpiry: Float
+  verifiedEmail: Boolean
+  verifiedPhone: Boolean
+  lastSeen: DateTime
 }
 
 input UserUpdateManyMutationInput {
@@ -1720,8 +1911,13 @@ input UserUpdateManyMutationInput {
   lastName: String
   role: UserUpdateroleInput
   phone: String
+  country: String
+  city: String
   resetToken: String
   resetTokenExpiry: Float
+  verifiedEmail: Boolean
+  verifiedPhone: Boolean
+  lastSeen: DateTime
 }
 
 input UserUpdateManyWithoutCompanyInput {
@@ -1759,9 +1955,14 @@ input UserUpdateWithoutCompanyDataInput {
   lastName: String
   role: UserUpdateroleInput
   phone: String
+  country: String
+  city: String
   favoriteItems: ItemUpdateManyInput
   resetToken: String
   resetTokenExpiry: Float
+  verifiedEmail: Boolean
+  verifiedPhone: Boolean
+  lastSeen: DateTime
 }
 
 input UserUpdateWithWhereUniqueWithoutCompanyInput {
@@ -1865,6 +2066,34 @@ input UserWhereInput {
   phone_not_starts_with: String
   phone_ends_with: String
   phone_not_ends_with: String
+  country: String
+  country_not: String
+  country_in: [String!]
+  country_not_in: [String!]
+  country_lt: String
+  country_lte: String
+  country_gt: String
+  country_gte: String
+  country_contains: String
+  country_not_contains: String
+  country_starts_with: String
+  country_not_starts_with: String
+  country_ends_with: String
+  country_not_ends_with: String
+  city: String
+  city_not: String
+  city_in: [String!]
+  city_not_in: [String!]
+  city_lt: String
+  city_lte: String
+  city_gt: String
+  city_gte: String
+  city_contains: String
+  city_not_contains: String
+  city_starts_with: String
+  city_not_starts_with: String
+  city_ends_with: String
+  city_not_ends_with: String
   company: CompanyWhereInput
   favoriteItems_every: ItemWhereInput
   favoriteItems_some: ItemWhereInput
@@ -1891,6 +2120,26 @@ input UserWhereInput {
   resetTokenExpiry_lte: Float
   resetTokenExpiry_gt: Float
   resetTokenExpiry_gte: Float
+  verifiedEmail: Boolean
+  verifiedEmail_not: Boolean
+  verifiedPhone: Boolean
+  verifiedPhone_not: Boolean
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  lastSeen: DateTime
+  lastSeen_not: DateTime
+  lastSeen_in: [DateTime!]
+  lastSeen_not_in: [DateTime!]
+  lastSeen_lt: DateTime
+  lastSeen_lte: DateTime
+  lastSeen_gt: DateTime
+  lastSeen_gte: DateTime
   AND: [UserWhereInput!]
   OR: [UserWhereInput!]
   NOT: [UserWhereInput!]

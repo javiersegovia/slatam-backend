@@ -1,12 +1,17 @@
 enum UserRole {
-  MODERATOR
-  SUPPLIER
-  BUYER
+  APP_MODERATOR
+  COMPANY_ADMIN
+  COMPANY_MANAGER
 }
 
 enum CompanyRole {
   SUPPLIER
   BUYER
+}
+
+enum ItemStatus {
+  PRIVATE
+  PUBLIC
 }
 
 enum OrderStatus {
@@ -23,12 +28,18 @@ type User {
   password: String!
   firstName: String!
   lastName: String!
-  role: [UserRole!]! @default(value: BUYER) @scalarList(strategy: RELATION)
+  role: [UserRole]! @scalarList(strategy: RELATION)
   phone: String
+  country: String
+  city: String
   company: Company @relation(name: "UsersInCompany")
   favoriteItems: [Item]
   resetToken: String
   resetTokenExpiry: Float
+  verifiedEmail: Boolean! @default(value: false)
+  verifiedPhone: Boolean! @default(value: false)
+  createdAt: DateTime! @createdAt
+  lastSeen: DateTime!
 }
 
 type Company {
@@ -50,15 +61,17 @@ type Item {
   title: String!
   description: String!
   sku: String
-  image: [ItemImage!]!
+  image: [ItemImage]! @relation(onDelete: CASCADE)
   price: Int!
   owner: Company!
+  status: ItemStatus! @default(value: PRIVATE)
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
 }
 
 type ItemImage {
   id: ID! @id
+  item: Item!
   main: String
   thumbnail: String
 }
@@ -70,6 +83,8 @@ type Order {
   supplier: Company!
   buyer: User!
   totalPrice: Int!
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }
 
 type OrderItem {

@@ -10,7 +10,7 @@ type Query {
 
   company(where: CompanyWhereUniqueInput!): Company!
   companies(
-    where: CompanyWhereUniqueInput
+    where: CompanyWhereInput
     orderBy: CompanyOrderByInput
     skip: Int
     first: Int
