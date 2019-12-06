@@ -17,40 +17,32 @@ const corsOptions = {
 app.use(cors(corsOptions))
 app.use(cookieParser())
 
-// decode the JWT so we can get the user ID on each request
 app.use((req, res, next) => {
   const { sltmSessionToken } = req.cookies
 
   if (sltmSessionToken) {
     const { userId } = jwt.verify(sltmSessionToken, process.env.APP_SECRET)
     req.userId = userId
-  } else {
-    console.log('theres no cookie')
   }
   next()
 })
 
-// use express middleware to populate current user on each request
-
 app.use(async (req, res, next) => {
-  // if they aren't logged in, skip this
   if (!req.userId) return next()
 
-  const fragment = `
-    fragment UserBasicInfo on User {
-      id
-      firstName
-      lastName
-      email
-    }
-  `
+  const updatedUser = await prisma.updateUser({
+    where: {
+      id: req.userId,
+    },
+    data: {
+      lastSeen: new Date().toISOString(),
+    },
+  })
 
-  const user = await prisma.user({ id: req.userId }).$fragment(fragment)
+  const company = await prisma.user({ id: req.userId }).company()
 
-  if (user) console.log('user found')
-
-  req.user = user
-
+  req.user = updatedUser
+  req.company = company
   next()
 })
 
@@ -60,7 +52,7 @@ server.applyMiddleware({
 })
 
 app.listen({ port: process.env.PORT }, () =>
-  console.log(
+  console.log( // eslint-disable-line
     `🚀 Server ready at http://localhost:${process.env.PORT}${server.graphqlPath}`
   )
 )

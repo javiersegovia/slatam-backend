@@ -13,6 +13,10 @@ var models = [
     embedded: false
   },
   {
+    name: "ItemStatus",
+    embedded: false
+  },
+  {
     name: "OrderStatus",
     embedded: false
   },

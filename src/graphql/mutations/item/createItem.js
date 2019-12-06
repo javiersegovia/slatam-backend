@@ -1,10 +1,9 @@
 module.exports = async (parent, args, ctx) => {
-  if (!ctx.req.userId) throw new Error('You must be logged in to do that.')
-
+  const { company } = ctx.req
   const item = await ctx.prisma.createItem({
     owner: {
       connect: {
-        id: ctx.req.userId,
+        id: company.id,
       },
     },
     ...args,

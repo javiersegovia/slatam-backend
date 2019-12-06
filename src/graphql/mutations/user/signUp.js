@@ -19,6 +19,7 @@ module.exports = async (parent, args, ctx) => {
     ...args,
     email,
     password,
+    lastSeen: new Date().toISOString(),
   })
 
   const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET)
