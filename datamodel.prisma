@@ -36,10 +36,28 @@ type User {
   favoriteItems: [Item]
   resetToken: String
   resetTokenExpiry: Float
+  invitedBy: User
+  verifyEmailToken: String
   verifiedEmail: Boolean! @default(value: false)
   verifiedPhone: Boolean! @default(value: false)
   createdAt: DateTime! @createdAt
-  lastSeen: DateTime!
+  lastSeen: DateTime
+}
+
+type UserInvitation {
+  id: ID! @id
+  inviteToken: String @unique
+  sentBy: User!
+  sentTo: String!
+  createdAt: DateTime! @createdAt
+}
+
+type CompanyInvitation {
+  id: ID! @id
+  inviteToken: String @unique
+  sentBy: Company!
+  sentTo: String!
+  createdAt: DateTime! @createdAt
 }
 
 type Company {

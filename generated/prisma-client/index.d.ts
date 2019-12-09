@@ -17,11 +17,13 @@ export type Maybe<T> = T | undefined | null;
 
 export interface Exists {
   company: (where?: CompanyWhereInput) => Promise<boolean>;
+  companyInvitation: (where?: CompanyInvitationWhereInput) => Promise<boolean>;
   item: (where?: ItemWhereInput) => Promise<boolean>;
   itemImage: (where?: ItemImageWhereInput) => Promise<boolean>;
   order: (where?: OrderWhereInput) => Promise<boolean>;
   orderItem: (where?: OrderItemWhereInput) => Promise<boolean>;
   user: (where?: UserWhereInput) => Promise<boolean>;
+  userInvitation: (where?: UserInvitationWhereInput) => Promise<boolean>;
 }
 
 export interface Node {}
@@ -62,6 +64,27 @@ export interface Prisma {
     first?: Int;
     last?: Int;
   }) => CompanyConnectionPromise;
+  companyInvitation: (
+    where: CompanyInvitationWhereUniqueInput
+  ) => CompanyInvitationNullablePromise;
+  companyInvitations: (args?: {
+    where?: CompanyInvitationWhereInput;
+    orderBy?: CompanyInvitationOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => FragmentableArray<CompanyInvitation>;
+  companyInvitationsConnection: (args?: {
+    where?: CompanyInvitationWhereInput;
+    orderBy?: CompanyInvitationOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => CompanyInvitationConnectionPromise;
   item: (where: ItemWhereUniqueInput) => ItemNullablePromise;
   items: (args?: {
     where?: ItemWhereInput;
@@ -157,6 +180,27 @@ export interface Prisma {
     first?: Int;
     last?: Int;
   }) => UserConnectionPromise;
+  userInvitation: (
+    where: UserInvitationWhereUniqueInput
+  ) => UserInvitationNullablePromise;
+  userInvitations: (args?: {
+    where?: UserInvitationWhereInput;
+    orderBy?: UserInvitationOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => FragmentableArray<UserInvitation>;
+  userInvitationsConnection: (args?: {
+    where?: UserInvitationWhereInput;
+    orderBy?: UserInvitationOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => UserInvitationConnectionPromise;
   node: (args: { id: ID_Output }) => Node;
 
   /**
@@ -179,6 +223,28 @@ export interface Prisma {
   }) => CompanyPromise;
   deleteCompany: (where: CompanyWhereUniqueInput) => CompanyPromise;
   deleteManyCompanies: (where?: CompanyWhereInput) => BatchPayloadPromise;
+  createCompanyInvitation: (
+    data: CompanyInvitationCreateInput
+  ) => CompanyInvitationPromise;
+  updateCompanyInvitation: (args: {
+    data: CompanyInvitationUpdateInput;
+    where: CompanyInvitationWhereUniqueInput;
+  }) => CompanyInvitationPromise;
+  updateManyCompanyInvitations: (args: {
+    data: CompanyInvitationUpdateManyMutationInput;
+    where?: CompanyInvitationWhereInput;
+  }) => BatchPayloadPromise;
+  upsertCompanyInvitation: (args: {
+    where: CompanyInvitationWhereUniqueInput;
+    create: CompanyInvitationCreateInput;
+    update: CompanyInvitationUpdateInput;
+  }) => CompanyInvitationPromise;
+  deleteCompanyInvitation: (
+    where: CompanyInvitationWhereUniqueInput
+  ) => CompanyInvitationPromise;
+  deleteManyCompanyInvitations: (
+    where?: CompanyInvitationWhereInput
+  ) => BatchPayloadPromise;
   createItem: (data: ItemCreateInput) => ItemPromise;
   updateItem: (args: {
     data: ItemUpdateInput;
@@ -259,6 +325,28 @@ export interface Prisma {
   }) => UserPromise;
   deleteUser: (where: UserWhereUniqueInput) => UserPromise;
   deleteManyUsers: (where?: UserWhereInput) => BatchPayloadPromise;
+  createUserInvitation: (
+    data: UserInvitationCreateInput
+  ) => UserInvitationPromise;
+  updateUserInvitation: (args: {
+    data: UserInvitationUpdateInput;
+    where: UserInvitationWhereUniqueInput;
+  }) => UserInvitationPromise;
+  updateManyUserInvitations: (args: {
+    data: UserInvitationUpdateManyMutationInput;
+    where?: UserInvitationWhereInput;
+  }) => BatchPayloadPromise;
+  upsertUserInvitation: (args: {
+    where: UserInvitationWhereUniqueInput;
+    create: UserInvitationCreateInput;
+    update: UserInvitationUpdateInput;
+  }) => UserInvitationPromise;
+  deleteUserInvitation: (
+    where: UserInvitationWhereUniqueInput
+  ) => UserInvitationPromise;
+  deleteManyUserInvitations: (
+    where?: UserInvitationWhereInput
+  ) => BatchPayloadPromise;
 
   /**
    * Subscriptions
@@ -271,6 +359,9 @@ export interface Subscription {
   company: (
     where?: CompanySubscriptionWhereInput
   ) => CompanySubscriptionPayloadSubscription;
+  companyInvitation: (
+    where?: CompanyInvitationSubscriptionWhereInput
+  ) => CompanyInvitationSubscriptionPayloadSubscription;
   item: (
     where?: ItemSubscriptionWhereInput
   ) => ItemSubscriptionPayloadSubscription;
@@ -286,6 +377,9 @@ export interface Subscription {
   user: (
     where?: UserSubscriptionWhereInput
   ) => UserSubscriptionPayloadSubscription;
+  userInvitation: (
+    where?: UserInvitationSubscriptionWhereInput
+  ) => UserInvitationSubscriptionPayloadSubscription;
 }
 
 export interface ClientConstructor<T> {
@@ -349,6 +443,8 @@ export type UserOrderByInput =
   | "resetToken_DESC"
   | "resetTokenExpiry_ASC"
   | "resetTokenExpiry_DESC"
+  | "verifyEmailToken_ASC"
+  | "verifyEmailToken_DESC"
   | "verifiedEmail_ASC"
   | "verifiedEmail_DESC"
   | "verifiedPhone_ASC"
@@ -373,6 +469,16 @@ export type CompanyOrderByInput =
   | "createdAt_DESC"
   | "updatedAt_ASC"
   | "updatedAt_DESC";
+
+export type CompanyInvitationOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "inviteToken_ASC"
+  | "inviteToken_DESC"
+  | "sentTo_ASC"
+  | "sentTo_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC";
 
 export type OrderStatus =
   | "PENDING"
@@ -406,6 +512,16 @@ export type OrderOrderByInput =
   | "createdAt_DESC"
   | "updatedAt_ASC"
   | "updatedAt_DESC";
+
+export type UserInvitationOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "inviteToken_ASC"
+  | "inviteToken_DESC"
+  | "sentTo_ASC"
+  | "sentTo_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC";
 
 export type MutationType = "CREATED" | "UPDATED" | "DELETED";
 
@@ -789,6 +905,21 @@ export interface UserWhereInput {
   resetTokenExpiry_lte?: Maybe<Float>;
   resetTokenExpiry_gt?: Maybe<Float>;
   resetTokenExpiry_gte?: Maybe<Float>;
+  invitedBy?: Maybe<UserWhereInput>;
+  verifyEmailToken?: Maybe<String>;
+  verifyEmailToken_not?: Maybe<String>;
+  verifyEmailToken_in?: Maybe<String[] | String>;
+  verifyEmailToken_not_in?: Maybe<String[] | String>;
+  verifyEmailToken_lt?: Maybe<String>;
+  verifyEmailToken_lte?: Maybe<String>;
+  verifyEmailToken_gt?: Maybe<String>;
+  verifyEmailToken_gte?: Maybe<String>;
+  verifyEmailToken_contains?: Maybe<String>;
+  verifyEmailToken_not_contains?: Maybe<String>;
+  verifyEmailToken_starts_with?: Maybe<String>;
+  verifyEmailToken_not_starts_with?: Maybe<String>;
+  verifyEmailToken_ends_with?: Maybe<String>;
+  verifyEmailToken_not_ends_with?: Maybe<String>;
   verifiedEmail?: Maybe<Boolean>;
   verifiedEmail_not?: Maybe<Boolean>;
   verifiedPhone?: Maybe<Boolean>;
@@ -812,6 +943,68 @@ export interface UserWhereInput {
   AND?: Maybe<UserWhereInput[] | UserWhereInput>;
   OR?: Maybe<UserWhereInput[] | UserWhereInput>;
   NOT?: Maybe<UserWhereInput[] | UserWhereInput>;
+}
+
+export type CompanyInvitationWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+  inviteToken?: Maybe<String>;
+}>;
+
+export interface CompanyInvitationWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  inviteToken?: Maybe<String>;
+  inviteToken_not?: Maybe<String>;
+  inviteToken_in?: Maybe<String[] | String>;
+  inviteToken_not_in?: Maybe<String[] | String>;
+  inviteToken_lt?: Maybe<String>;
+  inviteToken_lte?: Maybe<String>;
+  inviteToken_gt?: Maybe<String>;
+  inviteToken_gte?: Maybe<String>;
+  inviteToken_contains?: Maybe<String>;
+  inviteToken_not_contains?: Maybe<String>;
+  inviteToken_starts_with?: Maybe<String>;
+  inviteToken_not_starts_with?: Maybe<String>;
+  inviteToken_ends_with?: Maybe<String>;
+  inviteToken_not_ends_with?: Maybe<String>;
+  sentBy?: Maybe<CompanyWhereInput>;
+  sentTo?: Maybe<String>;
+  sentTo_not?: Maybe<String>;
+  sentTo_in?: Maybe<String[] | String>;
+  sentTo_not_in?: Maybe<String[] | String>;
+  sentTo_lt?: Maybe<String>;
+  sentTo_lte?: Maybe<String>;
+  sentTo_gt?: Maybe<String>;
+  sentTo_gte?: Maybe<String>;
+  sentTo_contains?: Maybe<String>;
+  sentTo_not_contains?: Maybe<String>;
+  sentTo_starts_with?: Maybe<String>;
+  sentTo_not_starts_with?: Maybe<String>;
+  sentTo_ends_with?: Maybe<String>;
+  sentTo_not_ends_with?: Maybe<String>;
+  createdAt?: Maybe<DateTimeInput>;
+  createdAt_not?: Maybe<DateTimeInput>;
+  createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_lt?: Maybe<DateTimeInput>;
+  createdAt_lte?: Maybe<DateTimeInput>;
+  createdAt_gt?: Maybe<DateTimeInput>;
+  createdAt_gte?: Maybe<DateTimeInput>;
+  AND?: Maybe<CompanyInvitationWhereInput[] | CompanyInvitationWhereInput>;
+  OR?: Maybe<CompanyInvitationWhereInput[] | CompanyInvitationWhereInput>;
+  NOT?: Maybe<CompanyInvitationWhereInput[] | CompanyInvitationWhereInput>;
 }
 
 export type ItemWhereUniqueInput = AtLeastOne<{
@@ -967,6 +1160,68 @@ export type UserWhereUniqueInput = AtLeastOne<{
   email?: Maybe<String>;
 }>;
 
+export type UserInvitationWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+  inviteToken?: Maybe<String>;
+}>;
+
+export interface UserInvitationWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  inviteToken?: Maybe<String>;
+  inviteToken_not?: Maybe<String>;
+  inviteToken_in?: Maybe<String[] | String>;
+  inviteToken_not_in?: Maybe<String[] | String>;
+  inviteToken_lt?: Maybe<String>;
+  inviteToken_lte?: Maybe<String>;
+  inviteToken_gt?: Maybe<String>;
+  inviteToken_gte?: Maybe<String>;
+  inviteToken_contains?: Maybe<String>;
+  inviteToken_not_contains?: Maybe<String>;
+  inviteToken_starts_with?: Maybe<String>;
+  inviteToken_not_starts_with?: Maybe<String>;
+  inviteToken_ends_with?: Maybe<String>;
+  inviteToken_not_ends_with?: Maybe<String>;
+  sentBy?: Maybe<UserWhereInput>;
+  sentTo?: Maybe<String>;
+  sentTo_not?: Maybe<String>;
+  sentTo_in?: Maybe<String[] | String>;
+  sentTo_not_in?: Maybe<String[] | String>;
+  sentTo_lt?: Maybe<String>;
+  sentTo_lte?: Maybe<String>;
+  sentTo_gt?: Maybe<String>;
+  sentTo_gte?: Maybe<String>;
+  sentTo_contains?: Maybe<String>;
+  sentTo_not_contains?: Maybe<String>;
+  sentTo_starts_with?: Maybe<String>;
+  sentTo_not_starts_with?: Maybe<String>;
+  sentTo_ends_with?: Maybe<String>;
+  sentTo_not_ends_with?: Maybe<String>;
+  createdAt?: Maybe<DateTimeInput>;
+  createdAt_not?: Maybe<DateTimeInput>;
+  createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_lt?: Maybe<DateTimeInput>;
+  createdAt_lte?: Maybe<DateTimeInput>;
+  createdAt_gt?: Maybe<DateTimeInput>;
+  createdAt_gte?: Maybe<DateTimeInput>;
+  AND?: Maybe<UserInvitationWhereInput[] | UserInvitationWhereInput>;
+  OR?: Maybe<UserInvitationWhereInput[] | UserInvitationWhereInput>;
+  NOT?: Maybe<UserInvitationWhereInput[] | UserInvitationWhereInput>;
+}
+
 export interface CompanyCreateInput {
   id?: Maybe<ID_Input>;
   owner: UserCreateOneInput;
@@ -998,9 +1253,11 @@ export interface UserCreateInput {
   favoriteItems?: Maybe<ItemCreateManyInput>;
   resetToken?: Maybe<String>;
   resetTokenExpiry?: Maybe<Float>;
+  invitedBy?: Maybe<UserCreateOneInput>;
+  verifyEmailToken?: Maybe<String>;
   verifiedEmail?: Maybe<Boolean>;
   verifiedPhone?: Maybe<Boolean>;
-  lastSeen: DateTimeInput;
+  lastSeen?: Maybe<DateTimeInput>;
 }
 
 export interface UserCreateroleInput {
@@ -1107,9 +1364,11 @@ export interface UserCreateWithoutCompanyInput {
   favoriteItems?: Maybe<ItemCreateManyInput>;
   resetToken?: Maybe<String>;
   resetTokenExpiry?: Maybe<Float>;
+  invitedBy?: Maybe<UserCreateOneInput>;
+  verifyEmailToken?: Maybe<String>;
   verifiedEmail?: Maybe<Boolean>;
   verifiedPhone?: Maybe<Boolean>;
-  lastSeen: DateTimeInput;
+  lastSeen?: Maybe<DateTimeInput>;
 }
 
 export interface CompanyUpdateInput {
@@ -1143,6 +1402,8 @@ export interface UserUpdateDataInput {
   favoriteItems?: Maybe<ItemUpdateManyInput>;
   resetToken?: Maybe<String>;
   resetTokenExpiry?: Maybe<Float>;
+  invitedBy?: Maybe<UserUpdateOneInput>;
+  verifyEmailToken?: Maybe<String>;
   verifiedEmail?: Maybe<Boolean>;
   verifiedPhone?: Maybe<Boolean>;
   lastSeen?: Maybe<DateTimeInput>;
@@ -1511,9 +1772,25 @@ export interface UserUpdateWithoutCompanyDataInput {
   favoriteItems?: Maybe<ItemUpdateManyInput>;
   resetToken?: Maybe<String>;
   resetTokenExpiry?: Maybe<Float>;
+  invitedBy?: Maybe<UserUpdateOneInput>;
+  verifyEmailToken?: Maybe<String>;
   verifiedEmail?: Maybe<Boolean>;
   verifiedPhone?: Maybe<Boolean>;
   lastSeen?: Maybe<DateTimeInput>;
+}
+
+export interface UserUpdateOneInput {
+  create?: Maybe<UserCreateInput>;
+  update?: Maybe<UserUpdateDataInput>;
+  upsert?: Maybe<UserUpsertNestedInput>;
+  delete?: Maybe<Boolean>;
+  disconnect?: Maybe<Boolean>;
+  connect?: Maybe<UserWhereUniqueInput>;
+}
+
+export interface UserUpsertNestedInput {
+  update: UserUpdateDataInput;
+  create: UserCreateInput;
 }
 
 export interface UserUpsertWithWhereUniqueWithoutCompanyInput {
@@ -1657,6 +1934,20 @@ export interface UserScalarWhereInput {
   resetTokenExpiry_lte?: Maybe<Float>;
   resetTokenExpiry_gt?: Maybe<Float>;
   resetTokenExpiry_gte?: Maybe<Float>;
+  verifyEmailToken?: Maybe<String>;
+  verifyEmailToken_not?: Maybe<String>;
+  verifyEmailToken_in?: Maybe<String[] | String>;
+  verifyEmailToken_not_in?: Maybe<String[] | String>;
+  verifyEmailToken_lt?: Maybe<String>;
+  verifyEmailToken_lte?: Maybe<String>;
+  verifyEmailToken_gt?: Maybe<String>;
+  verifyEmailToken_gte?: Maybe<String>;
+  verifyEmailToken_contains?: Maybe<String>;
+  verifyEmailToken_not_contains?: Maybe<String>;
+  verifyEmailToken_starts_with?: Maybe<String>;
+  verifyEmailToken_not_starts_with?: Maybe<String>;
+  verifyEmailToken_ends_with?: Maybe<String>;
+  verifyEmailToken_not_ends_with?: Maybe<String>;
   verifiedEmail?: Maybe<Boolean>;
   verifiedEmail_not?: Maybe<Boolean>;
   verifiedPhone?: Maybe<Boolean>;
@@ -1698,6 +1989,7 @@ export interface UserUpdateManyDataInput {
   city?: Maybe<String>;
   resetToken?: Maybe<String>;
   resetTokenExpiry?: Maybe<Float>;
+  verifyEmailToken?: Maybe<String>;
   verifiedEmail?: Maybe<Boolean>;
   verifiedPhone?: Maybe<Boolean>;
   lastSeen?: Maybe<DateTimeInput>;
@@ -1714,17 +2006,58 @@ export interface ItemUpsertWithWhereUniqueNestedInput {
   create: ItemCreateInput;
 }
 
-export interface UserUpsertNestedInput {
-  update: UserUpdateDataInput;
-  create: UserCreateInput;
-}
-
 export interface CompanyUpdateManyMutationInput {
   name?: Maybe<String>;
   companyRole?: Maybe<CompanyUpdatecompanyRoleInput>;
   country?: Maybe<String>;
   city?: Maybe<String>;
   postalCode?: Maybe<Int>;
+}
+
+export interface CompanyInvitationCreateInput {
+  id?: Maybe<ID_Input>;
+  inviteToken?: Maybe<String>;
+  sentBy: CompanyCreateOneInput;
+  sentTo: String;
+}
+
+export interface CompanyCreateOneInput {
+  create?: Maybe<CompanyCreateInput>;
+  connect?: Maybe<CompanyWhereUniqueInput>;
+}
+
+export interface CompanyInvitationUpdateInput {
+  inviteToken?: Maybe<String>;
+  sentBy?: Maybe<CompanyUpdateOneRequiredInput>;
+  sentTo?: Maybe<String>;
+}
+
+export interface CompanyUpdateOneRequiredInput {
+  create?: Maybe<CompanyCreateInput>;
+  update?: Maybe<CompanyUpdateDataInput>;
+  upsert?: Maybe<CompanyUpsertNestedInput>;
+  connect?: Maybe<CompanyWhereUniqueInput>;
+}
+
+export interface CompanyUpdateDataInput {
+  owner?: Maybe<UserUpdateOneRequiredInput>;
+  name?: Maybe<String>;
+  companyRole?: Maybe<CompanyUpdatecompanyRoleInput>;
+  country?: Maybe<String>;
+  city?: Maybe<String>;
+  postalCode?: Maybe<Int>;
+  members?: Maybe<UserUpdateManyWithoutCompanyInput>;
+  items?: Maybe<ItemUpdateManyWithoutOwnerInput>;
+}
+
+export interface CompanyUpsertNestedInput {
+  update: CompanyUpdateDataInput;
+  create: CompanyCreateInput;
+}
+
+export interface CompanyInvitationUpdateManyMutationInput {
+  inviteToken?: Maybe<String>;
+  sentTo?: Maybe<String>;
 }
 
 export interface ItemUpdateInput {
@@ -1823,11 +2156,6 @@ export interface OrderItemCreateInput {
   quantity?: Maybe<Int>;
 }
 
-export interface CompanyCreateOneInput {
-  create?: Maybe<CompanyCreateInput>;
-  connect?: Maybe<CompanyWhereUniqueInput>;
-}
-
 export interface OrderUpdateInput {
   status?: Maybe<OrderStatus>;
   items?: Maybe<OrderItemUpdateManyInput>;
@@ -1869,29 +2197,6 @@ export interface OrderItemUpdateDataInput {
   price?: Maybe<Int>;
   owner?: Maybe<CompanyUpdateOneRequiredInput>;
   quantity?: Maybe<Int>;
-}
-
-export interface CompanyUpdateOneRequiredInput {
-  create?: Maybe<CompanyCreateInput>;
-  update?: Maybe<CompanyUpdateDataInput>;
-  upsert?: Maybe<CompanyUpsertNestedInput>;
-  connect?: Maybe<CompanyWhereUniqueInput>;
-}
-
-export interface CompanyUpdateDataInput {
-  owner?: Maybe<UserUpdateOneRequiredInput>;
-  name?: Maybe<String>;
-  companyRole?: Maybe<CompanyUpdatecompanyRoleInput>;
-  country?: Maybe<String>;
-  city?: Maybe<String>;
-  postalCode?: Maybe<Int>;
-  members?: Maybe<UserUpdateManyWithoutCompanyInput>;
-  items?: Maybe<ItemUpdateManyWithoutOwnerInput>;
-}
-
-export interface CompanyUpsertNestedInput {
-  update: CompanyUpdateDataInput;
-  create: CompanyCreateInput;
 }
 
 export interface OrderItemUpsertWithWhereUniqueNestedInput {
@@ -2026,6 +2331,8 @@ export interface UserUpdateInput {
   favoriteItems?: Maybe<ItemUpdateManyInput>;
   resetToken?: Maybe<String>;
   resetTokenExpiry?: Maybe<Float>;
+  invitedBy?: Maybe<UserUpdateOneInput>;
+  verifyEmailToken?: Maybe<String>;
   verifiedEmail?: Maybe<Boolean>;
   verifiedPhone?: Maybe<Boolean>;
   lastSeen?: Maybe<DateTimeInput>;
@@ -2042,9 +2349,28 @@ export interface UserUpdateManyMutationInput {
   city?: Maybe<String>;
   resetToken?: Maybe<String>;
   resetTokenExpiry?: Maybe<Float>;
+  verifyEmailToken?: Maybe<String>;
   verifiedEmail?: Maybe<Boolean>;
   verifiedPhone?: Maybe<Boolean>;
   lastSeen?: Maybe<DateTimeInput>;
+}
+
+export interface UserInvitationCreateInput {
+  id?: Maybe<ID_Input>;
+  inviteToken?: Maybe<String>;
+  sentBy: UserCreateOneInput;
+  sentTo: String;
+}
+
+export interface UserInvitationUpdateInput {
+  inviteToken?: Maybe<String>;
+  sentBy?: Maybe<UserUpdateOneRequiredInput>;
+  sentTo?: Maybe<String>;
+}
+
+export interface UserInvitationUpdateManyMutationInput {
+  inviteToken?: Maybe<String>;
+  sentTo?: Maybe<String>;
 }
 
 export interface CompanySubscriptionWhereInput {
@@ -2056,6 +2382,26 @@ export interface CompanySubscriptionWhereInput {
   AND?: Maybe<CompanySubscriptionWhereInput[] | CompanySubscriptionWhereInput>;
   OR?: Maybe<CompanySubscriptionWhereInput[] | CompanySubscriptionWhereInput>;
   NOT?: Maybe<CompanySubscriptionWhereInput[] | CompanySubscriptionWhereInput>;
+}
+
+export interface CompanyInvitationSubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<CompanyInvitationWhereInput>;
+  AND?: Maybe<
+    | CompanyInvitationSubscriptionWhereInput[]
+    | CompanyInvitationSubscriptionWhereInput
+  >;
+  OR?: Maybe<
+    | CompanyInvitationSubscriptionWhereInput[]
+    | CompanyInvitationSubscriptionWhereInput
+  >;
+  NOT?: Maybe<
+    | CompanyInvitationSubscriptionWhereInput[]
+    | CompanyInvitationSubscriptionWhereInput
+  >;
 }
 
 export interface ItemSubscriptionWhereInput {
@@ -2123,6 +2469,26 @@ export interface UserSubscriptionWhereInput {
   AND?: Maybe<UserSubscriptionWhereInput[] | UserSubscriptionWhereInput>;
   OR?: Maybe<UserSubscriptionWhereInput[] | UserSubscriptionWhereInput>;
   NOT?: Maybe<UserSubscriptionWhereInput[] | UserSubscriptionWhereInput>;
+}
+
+export interface UserInvitationSubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<UserInvitationWhereInput>;
+  AND?: Maybe<
+    | UserInvitationSubscriptionWhereInput[]
+    | UserInvitationSubscriptionWhereInput
+  >;
+  OR?: Maybe<
+    | UserInvitationSubscriptionWhereInput[]
+    | UserInvitationSubscriptionWhereInput
+  >;
+  NOT?: Maybe<
+    | UserInvitationSubscriptionWhereInput[]
+    | UserInvitationSubscriptionWhereInput
+  >;
 }
 
 export interface NodeNode {
@@ -2246,10 +2612,11 @@ export interface User {
   city?: String;
   resetToken?: String;
   resetTokenExpiry?: Float;
+  verifyEmailToken?: String;
   verifiedEmail: Boolean;
   verifiedPhone: Boolean;
   createdAt: DateTimeOutput;
-  lastSeen: DateTimeOutput;
+  lastSeen?: DateTimeOutput;
 }
 
 export interface UserPromise extends Promise<User>, Fragmentable {
@@ -2274,6 +2641,8 @@ export interface UserPromise extends Promise<User>, Fragmentable {
   }) => T;
   resetToken: () => Promise<String>;
   resetTokenExpiry: () => Promise<Float>;
+  invitedBy: <T = UserPromise>() => T;
+  verifyEmailToken: () => Promise<String>;
   verifiedEmail: () => Promise<Boolean>;
   verifiedPhone: () => Promise<Boolean>;
   createdAt: () => Promise<DateTimeOutput>;
@@ -2304,6 +2673,8 @@ export interface UserSubscription
   }) => T;
   resetToken: () => Promise<AsyncIterator<String>>;
   resetTokenExpiry: () => Promise<AsyncIterator<Float>>;
+  invitedBy: <T = UserSubscription>() => T;
+  verifyEmailToken: () => Promise<AsyncIterator<String>>;
   verifiedEmail: () => Promise<AsyncIterator<Boolean>>;
   verifiedPhone: () => Promise<AsyncIterator<Boolean>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
@@ -2334,6 +2705,8 @@ export interface UserNullablePromise
   }) => T;
   resetToken: () => Promise<String>;
   resetTokenExpiry: () => Promise<Float>;
+  invitedBy: <T = UserPromise>() => T;
+  verifyEmailToken: () => Promise<String>;
   verifiedEmail: () => Promise<Boolean>;
   verifiedPhone: () => Promise<Boolean>;
   createdAt: () => Promise<DateTimeOutput>;
@@ -2522,6 +2895,99 @@ export interface AggregateCompanyPromise
 
 export interface AggregateCompanySubscription
   extends Promise<AsyncIterator<AggregateCompany>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface CompanyInvitation {
+  id: ID_Output;
+  inviteToken?: String;
+  sentTo: String;
+  createdAt: DateTimeOutput;
+}
+
+export interface CompanyInvitationPromise
+  extends Promise<CompanyInvitation>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  inviteToken: () => Promise<String>;
+  sentBy: <T = CompanyPromise>() => T;
+  sentTo: () => Promise<String>;
+  createdAt: () => Promise<DateTimeOutput>;
+}
+
+export interface CompanyInvitationSubscription
+  extends Promise<AsyncIterator<CompanyInvitation>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  inviteToken: () => Promise<AsyncIterator<String>>;
+  sentBy: <T = CompanySubscription>() => T;
+  sentTo: () => Promise<AsyncIterator<String>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
+
+export interface CompanyInvitationNullablePromise
+  extends Promise<CompanyInvitation | null>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  inviteToken: () => Promise<String>;
+  sentBy: <T = CompanyPromise>() => T;
+  sentTo: () => Promise<String>;
+  createdAt: () => Promise<DateTimeOutput>;
+}
+
+export interface CompanyInvitationConnection {
+  pageInfo: PageInfo;
+  edges: CompanyInvitationEdge[];
+}
+
+export interface CompanyInvitationConnectionPromise
+  extends Promise<CompanyInvitationConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<CompanyInvitationEdge>>() => T;
+  aggregate: <T = AggregateCompanyInvitationPromise>() => T;
+}
+
+export interface CompanyInvitationConnectionSubscription
+  extends Promise<AsyncIterator<CompanyInvitationConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<CompanyInvitationEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateCompanyInvitationSubscription>() => T;
+}
+
+export interface CompanyInvitationEdge {
+  node: CompanyInvitation;
+  cursor: String;
+}
+
+export interface CompanyInvitationEdgePromise
+  extends Promise<CompanyInvitationEdge>,
+    Fragmentable {
+  node: <T = CompanyInvitationPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface CompanyInvitationEdgeSubscription
+  extends Promise<AsyncIterator<CompanyInvitationEdge>>,
+    Fragmentable {
+  node: <T = CompanyInvitationSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateCompanyInvitation {
+  count: Int;
+}
+
+export interface AggregateCompanyInvitationPromise
+  extends Promise<AggregateCompanyInvitation>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateCompanyInvitationSubscription
+  extends Promise<AsyncIterator<AggregateCompanyInvitation>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
 }
@@ -2912,6 +3378,99 @@ export interface AggregateUserSubscription
   count: () => Promise<AsyncIterator<Int>>;
 }
 
+export interface UserInvitation {
+  id: ID_Output;
+  inviteToken?: String;
+  sentTo: String;
+  createdAt: DateTimeOutput;
+}
+
+export interface UserInvitationPromise
+  extends Promise<UserInvitation>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  inviteToken: () => Promise<String>;
+  sentBy: <T = UserPromise>() => T;
+  sentTo: () => Promise<String>;
+  createdAt: () => Promise<DateTimeOutput>;
+}
+
+export interface UserInvitationSubscription
+  extends Promise<AsyncIterator<UserInvitation>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  inviteToken: () => Promise<AsyncIterator<String>>;
+  sentBy: <T = UserSubscription>() => T;
+  sentTo: () => Promise<AsyncIterator<String>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
+
+export interface UserInvitationNullablePromise
+  extends Promise<UserInvitation | null>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  inviteToken: () => Promise<String>;
+  sentBy: <T = UserPromise>() => T;
+  sentTo: () => Promise<String>;
+  createdAt: () => Promise<DateTimeOutput>;
+}
+
+export interface UserInvitationConnection {
+  pageInfo: PageInfo;
+  edges: UserInvitationEdge[];
+}
+
+export interface UserInvitationConnectionPromise
+  extends Promise<UserInvitationConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<UserInvitationEdge>>() => T;
+  aggregate: <T = AggregateUserInvitationPromise>() => T;
+}
+
+export interface UserInvitationConnectionSubscription
+  extends Promise<AsyncIterator<UserInvitationConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<UserInvitationEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateUserInvitationSubscription>() => T;
+}
+
+export interface UserInvitationEdge {
+  node: UserInvitation;
+  cursor: String;
+}
+
+export interface UserInvitationEdgePromise
+  extends Promise<UserInvitationEdge>,
+    Fragmentable {
+  node: <T = UserInvitationPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface UserInvitationEdgeSubscription
+  extends Promise<AsyncIterator<UserInvitationEdge>>,
+    Fragmentable {
+  node: <T = UserInvitationSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateUserInvitation {
+  count: Int;
+}
+
+export interface AggregateUserInvitationPromise
+  extends Promise<AggregateUserInvitation>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateUserInvitationSubscription
+  extends Promise<AsyncIterator<AggregateUserInvitation>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
 export interface BatchPayload {
   count: Long;
 }
@@ -2988,6 +3547,56 @@ export interface CompanyPreviousValuesSubscription
   postalCode: () => Promise<AsyncIterator<Int>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
+
+export interface CompanyInvitationSubscriptionPayload {
+  mutation: MutationType;
+  node: CompanyInvitation;
+  updatedFields: String[];
+  previousValues: CompanyInvitationPreviousValues;
+}
+
+export interface CompanyInvitationSubscriptionPayloadPromise
+  extends Promise<CompanyInvitationSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = CompanyInvitationPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = CompanyInvitationPreviousValuesPromise>() => T;
+}
+
+export interface CompanyInvitationSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<CompanyInvitationSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = CompanyInvitationSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = CompanyInvitationPreviousValuesSubscription>() => T;
+}
+
+export interface CompanyInvitationPreviousValues {
+  id: ID_Output;
+  inviteToken?: String;
+  sentTo: String;
+  createdAt: DateTimeOutput;
+}
+
+export interface CompanyInvitationPreviousValuesPromise
+  extends Promise<CompanyInvitationPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  inviteToken: () => Promise<String>;
+  sentTo: () => Promise<String>;
+  createdAt: () => Promise<DateTimeOutput>;
+}
+
+export interface CompanyInvitationPreviousValuesSubscription
+  extends Promise<AsyncIterator<CompanyInvitationPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  inviteToken: () => Promise<AsyncIterator<String>>;
+  sentTo: () => Promise<AsyncIterator<String>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
 export interface ItemSubscriptionPayload {
@@ -3245,10 +3854,11 @@ export interface UserPreviousValues {
   city?: String;
   resetToken?: String;
   resetTokenExpiry?: Float;
+  verifyEmailToken?: String;
   verifiedEmail: Boolean;
   verifiedPhone: Boolean;
   createdAt: DateTimeOutput;
-  lastSeen: DateTimeOutput;
+  lastSeen?: DateTimeOutput;
 }
 
 export interface UserPreviousValuesPromise
@@ -3265,6 +3875,7 @@ export interface UserPreviousValuesPromise
   city: () => Promise<String>;
   resetToken: () => Promise<String>;
   resetTokenExpiry: () => Promise<Float>;
+  verifyEmailToken: () => Promise<String>;
   verifiedEmail: () => Promise<Boolean>;
   verifiedPhone: () => Promise<Boolean>;
   createdAt: () => Promise<DateTimeOutput>;
@@ -3285,10 +3896,61 @@ export interface UserPreviousValuesSubscription
   city: () => Promise<AsyncIterator<String>>;
   resetToken: () => Promise<AsyncIterator<String>>;
   resetTokenExpiry: () => Promise<AsyncIterator<Float>>;
+  verifyEmailToken: () => Promise<AsyncIterator<String>>;
   verifiedEmail: () => Promise<AsyncIterator<Boolean>>;
   verifiedPhone: () => Promise<AsyncIterator<Boolean>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   lastSeen: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
+
+export interface UserInvitationSubscriptionPayload {
+  mutation: MutationType;
+  node: UserInvitation;
+  updatedFields: String[];
+  previousValues: UserInvitationPreviousValues;
+}
+
+export interface UserInvitationSubscriptionPayloadPromise
+  extends Promise<UserInvitationSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = UserInvitationPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = UserInvitationPreviousValuesPromise>() => T;
+}
+
+export interface UserInvitationSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<UserInvitationSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = UserInvitationSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = UserInvitationPreviousValuesSubscription>() => T;
+}
+
+export interface UserInvitationPreviousValues {
+  id: ID_Output;
+  inviteToken?: String;
+  sentTo: String;
+  createdAt: DateTimeOutput;
+}
+
+export interface UserInvitationPreviousValuesPromise
+  extends Promise<UserInvitationPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  inviteToken: () => Promise<String>;
+  sentTo: () => Promise<String>;
+  createdAt: () => Promise<DateTimeOutput>;
+}
+
+export interface UserInvitationPreviousValuesSubscription
+  extends Promise<AsyncIterator<UserInvitationPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  inviteToken: () => Promise<AsyncIterator<String>>;
+  sentTo: () => Promise<AsyncIterator<String>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
 /*
@@ -3352,6 +4014,14 @@ export const models: Model[] = [
   },
   {
     name: "User",
+    embedded: false
+  },
+  {
+    name: "UserInvitation",
+    embedded: false
+  },
+  {
+    name: "CompanyInvitation",
     embedded: false
   },
   {

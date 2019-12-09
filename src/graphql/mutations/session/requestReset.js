@@ -18,7 +18,7 @@ module.exports = async (parent, args, ctx) => {
 
   await sgMail.send({
     to: user.email,
-    from: 'javiersegoviaa29@gmail.com',
+    from: process.env.SENDGRID_SUPPORT_EMAIL,
     subject: 'Your password reset token',
     html: makeANiceEmail(`You asked to reset your password. Click the link: 
     \n\n

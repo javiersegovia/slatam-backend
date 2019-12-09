@@ -14,6 +14,7 @@ const companyQueries = require('./queries/company')
 
 // MUTATIONS
 const userMutations = require('./mutations/user')
+const sessionMutations = require('./mutations/session')
 const itemMutations = require('./mutations/item')
 const companyMutations = require('./mutations/company')
 
@@ -29,6 +30,7 @@ const resolvers = merge(
   companyQueries,
   // mutations
   userMutations,
+  sessionMutations,
   itemMutations,
   companyMutations
 )

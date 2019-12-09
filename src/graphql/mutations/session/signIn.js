@@ -10,7 +10,6 @@ module.exports = async (parent, args, ctx) => {
       password
     }
   `
-
   const user = await ctx.prisma.user({ email }).$fragment(fragment)
   if (!user) throw new Error(`No such user found for email ${email}`)
 

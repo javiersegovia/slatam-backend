@@ -17,13 +17,17 @@ const corsOptions = {
 app.use(cors(corsOptions))
 app.use(cookieParser())
 
-app.use((req, res, next) => {
+app.use(async (req, res, next) => {
   const { sltmSessionToken } = req.cookies
 
-  if (sltmSessionToken) {
-    const { userId } = jwt.verify(sltmSessionToken, process.env.APP_SECRET)
-    req.userId = userId
-  }
+  if (!sltmSessionToken) return next()
+  const { userId } = jwt.verify(sltmSessionToken, process.env.APP_SECRET)
+
+  const userExists = await prisma.$exists.user({ id: userId })
+  if (!userExists) return next()
+
+  req.userId = userId
+
   next()
 })
 
@@ -39,9 +43,19 @@ app.use(async (req, res, next) => {
     },
   })
 
+  if (!updatedUser) {
+    req.user = null
+    next()
+  }
+  req.user = updatedUser
+
   const company = await prisma.user({ id: req.userId }).company()
 
-  req.user = updatedUser
+  if (!company) {
+    req.company = null
+    next()
+  }
+
   req.company = company
   next()
 })
@@ -52,7 +66,8 @@ server.applyMiddleware({
 })
 
 app.listen({ port: process.env.PORT }, () =>
-  console.log( // eslint-disable-line
+  console.log(
+    // eslint-disable-line
     `🚀 Server ready at http://localhost:${process.env.PORT}${server.graphqlPath}`
   )
 )

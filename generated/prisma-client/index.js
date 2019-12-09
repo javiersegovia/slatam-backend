@@ -25,6 +25,14 @@ var models = [
     embedded: false
   },
   {
+    name: "UserInvitation",
+    embedded: false
+  },
+  {
+    name: "CompanyInvitation",
+    embedded: false
+  },
+  {
     name: "Company",
     embedded: false
   },

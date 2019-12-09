@@ -6,12 +6,24 @@ type Mutation {
   signUp(
     email: String!
     password: String!
+    confirmPassword: String!
     firstName: String!
     lastName: String!
+  ): User!
+  signUpByInvitation(
+    email: String!
+    password: String!
+    confirmPassword: String!
+    firstName: String!
+    lastName: String!
+    inviteToken: String!
   ): User!
   signIn(email: String!, password: String!): User!
   signOut: SuccessMessage
   requestReset(email: String!): SuccessMessage
+  verifyEmail(email: String!, verifyEmailToken: String!): User!
+  inviteUser(email: String!): SuccessMessage
+  inviteToCompany(email: String!): SuccessMessage
   resetPassword(
     resetToken: String!
     password: String!
@@ -23,7 +35,7 @@ type Mutation {
   ### /////////////////////// ###
 
   createRandomUser: User!
-  deleteAllUsers: SuccessMessage
+  deleteUser(email: String!): SuccessMessage
 
   ### /////////////////////// ###
   ###        COMPANIES        ###
@@ -36,6 +48,7 @@ type Mutation {
     city: String
     postalCode: Int
   ): Company!
+  joinByInvitation(inviteToken: String!): User!
 
   ### /////////////////////// ###
   ###          ITEMS          ###

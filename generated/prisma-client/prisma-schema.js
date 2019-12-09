@@ -7,6 +7,10 @@ module.exports = {
   count: Int!
 }
 
+type AggregateCompanyInvitation {
+  count: Int!
+}
+
 type AggregateItem {
   count: Int!
 }
@@ -24,6 +28,10 @@ type AggregateOrderItem {
 }
 
 type AggregateUser {
+  count: Int!
+}
+
+type AggregateUserInvitation {
   count: Int!
 }
 
@@ -107,6 +115,141 @@ input CompanyCreateWithoutMembersInput {
 type CompanyEdge {
   node: Company!
   cursor: String!
+}
+
+type CompanyInvitation {
+  id: ID!
+  inviteToken: String
+  sentBy: Company!
+  sentTo: String!
+  createdAt: DateTime!
+}
+
+type CompanyInvitationConnection {
+  pageInfo: PageInfo!
+  edges: [CompanyInvitationEdge]!
+  aggregate: AggregateCompanyInvitation!
+}
+
+input CompanyInvitationCreateInput {
+  id: ID
+  inviteToken: String
+  sentBy: CompanyCreateOneInput!
+  sentTo: String!
+}
+
+type CompanyInvitationEdge {
+  node: CompanyInvitation!
+  cursor: String!
+}
+
+enum CompanyInvitationOrderByInput {
+  id_ASC
+  id_DESC
+  inviteToken_ASC
+  inviteToken_DESC
+  sentTo_ASC
+  sentTo_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type CompanyInvitationPreviousValues {
+  id: ID!
+  inviteToken: String
+  sentTo: String!
+  createdAt: DateTime!
+}
+
+type CompanyInvitationSubscriptionPayload {
+  mutation: MutationType!
+  node: CompanyInvitation
+  updatedFields: [String!]
+  previousValues: CompanyInvitationPreviousValues
+}
+
+input CompanyInvitationSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: CompanyInvitationWhereInput
+  AND: [CompanyInvitationSubscriptionWhereInput!]
+  OR: [CompanyInvitationSubscriptionWhereInput!]
+  NOT: [CompanyInvitationSubscriptionWhereInput!]
+}
+
+input CompanyInvitationUpdateInput {
+  inviteToken: String
+  sentBy: CompanyUpdateOneRequiredInput
+  sentTo: String
+}
+
+input CompanyInvitationUpdateManyMutationInput {
+  inviteToken: String
+  sentTo: String
+}
+
+input CompanyInvitationWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  inviteToken: String
+  inviteToken_not: String
+  inviteToken_in: [String!]
+  inviteToken_not_in: [String!]
+  inviteToken_lt: String
+  inviteToken_lte: String
+  inviteToken_gt: String
+  inviteToken_gte: String
+  inviteToken_contains: String
+  inviteToken_not_contains: String
+  inviteToken_starts_with: String
+  inviteToken_not_starts_with: String
+  inviteToken_ends_with: String
+  inviteToken_not_ends_with: String
+  sentBy: CompanyWhereInput
+  sentTo: String
+  sentTo_not: String
+  sentTo_in: [String!]
+  sentTo_not_in: [String!]
+  sentTo_lt: String
+  sentTo_lte: String
+  sentTo_gt: String
+  sentTo_gte: String
+  sentTo_contains: String
+  sentTo_not_contains: String
+  sentTo_starts_with: String
+  sentTo_not_starts_with: String
+  sentTo_ends_with: String
+  sentTo_not_ends_with: String
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  AND: [CompanyInvitationWhereInput!]
+  OR: [CompanyInvitationWhereInput!]
+  NOT: [CompanyInvitationWhereInput!]
+}
+
+input CompanyInvitationWhereUniqueInput {
+  id: ID
+  inviteToken: String
 }
 
 enum CompanyOrderByInput {
@@ -1008,6 +1151,12 @@ type Mutation {
   upsertCompany(where: CompanyWhereUniqueInput!, create: CompanyCreateInput!, update: CompanyUpdateInput!): Company!
   deleteCompany(where: CompanyWhereUniqueInput!): Company
   deleteManyCompanies(where: CompanyWhereInput): BatchPayload!
+  createCompanyInvitation(data: CompanyInvitationCreateInput!): CompanyInvitation!
+  updateCompanyInvitation(data: CompanyInvitationUpdateInput!, where: CompanyInvitationWhereUniqueInput!): CompanyInvitation
+  updateManyCompanyInvitations(data: CompanyInvitationUpdateManyMutationInput!, where: CompanyInvitationWhereInput): BatchPayload!
+  upsertCompanyInvitation(where: CompanyInvitationWhereUniqueInput!, create: CompanyInvitationCreateInput!, update: CompanyInvitationUpdateInput!): CompanyInvitation!
+  deleteCompanyInvitation(where: CompanyInvitationWhereUniqueInput!): CompanyInvitation
+  deleteManyCompanyInvitations(where: CompanyInvitationWhereInput): BatchPayload!
   createItem(data: ItemCreateInput!): Item!
   updateItem(data: ItemUpdateInput!, where: ItemWhereUniqueInput!): Item
   updateManyItems(data: ItemUpdateManyMutationInput!, where: ItemWhereInput): BatchPayload!
@@ -1038,6 +1187,12 @@ type Mutation {
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
   deleteUser(where: UserWhereUniqueInput!): User
   deleteManyUsers(where: UserWhereInput): BatchPayload!
+  createUserInvitation(data: UserInvitationCreateInput!): UserInvitation!
+  updateUserInvitation(data: UserInvitationUpdateInput!, where: UserInvitationWhereUniqueInput!): UserInvitation
+  updateManyUserInvitations(data: UserInvitationUpdateManyMutationInput!, where: UserInvitationWhereInput): BatchPayload!
+  upsertUserInvitation(where: UserInvitationWhereUniqueInput!, create: UserInvitationCreateInput!, update: UserInvitationUpdateInput!): UserInvitation!
+  deleteUserInvitation(where: UserInvitationWhereUniqueInput!): UserInvitation
+  deleteManyUserInvitations(where: UserInvitationWhereInput): BatchPayload!
 }
 
 enum MutationType {
@@ -1510,6 +1665,9 @@ type Query {
   company(where: CompanyWhereUniqueInput!): Company
   companies(where: CompanyWhereInput, orderBy: CompanyOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Company]!
   companiesConnection(where: CompanyWhereInput, orderBy: CompanyOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CompanyConnection!
+  companyInvitation(where: CompanyInvitationWhereUniqueInput!): CompanyInvitation
+  companyInvitations(where: CompanyInvitationWhereInput, orderBy: CompanyInvitationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CompanyInvitation]!
+  companyInvitationsConnection(where: CompanyInvitationWhereInput, orderBy: CompanyInvitationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CompanyInvitationConnection!
   item(where: ItemWhereUniqueInput!): Item
   items(where: ItemWhereInput, orderBy: ItemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Item]!
   itemsConnection(where: ItemWhereInput, orderBy: ItemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ItemConnection!
@@ -1525,16 +1683,21 @@ type Query {
   user(where: UserWhereUniqueInput!): User
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
+  userInvitation(where: UserInvitationWhereUniqueInput!): UserInvitation
+  userInvitations(where: UserInvitationWhereInput, orderBy: UserInvitationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [UserInvitation]!
+  userInvitationsConnection(where: UserInvitationWhereInput, orderBy: UserInvitationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserInvitationConnection!
   node(id: ID!): Node
 }
 
 type Subscription {
   company(where: CompanySubscriptionWhereInput): CompanySubscriptionPayload
+  companyInvitation(where: CompanyInvitationSubscriptionWhereInput): CompanyInvitationSubscriptionPayload
   item(where: ItemSubscriptionWhereInput): ItemSubscriptionPayload
   itemImage(where: ItemImageSubscriptionWhereInput): ItemImageSubscriptionPayload
   order(where: OrderSubscriptionWhereInput): OrderSubscriptionPayload
   orderItem(where: OrderItemSubscriptionWhereInput): OrderItemSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
+  userInvitation(where: UserInvitationSubscriptionWhereInput): UserInvitationSubscriptionPayload
 }
 
 type User {
@@ -1551,10 +1714,12 @@ type User {
   favoriteItems(where: ItemWhereInput, orderBy: ItemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Item!]
   resetToken: String
   resetTokenExpiry: Float
+  invitedBy: User
+  verifyEmailToken: String
   verifiedEmail: Boolean!
   verifiedPhone: Boolean!
   createdAt: DateTime!
-  lastSeen: DateTime!
+  lastSeen: DateTime
 }
 
 type UserConnection {
@@ -1577,9 +1742,11 @@ input UserCreateInput {
   favoriteItems: ItemCreateManyInput
   resetToken: String
   resetTokenExpiry: Float
+  invitedBy: UserCreateOneInput
+  verifyEmailToken: String
   verifiedEmail: Boolean
   verifiedPhone: Boolean
-  lastSeen: DateTime!
+  lastSeen: DateTime
 }
 
 input UserCreateManyWithoutCompanyInput {
@@ -1609,14 +1776,151 @@ input UserCreateWithoutCompanyInput {
   favoriteItems: ItemCreateManyInput
   resetToken: String
   resetTokenExpiry: Float
+  invitedBy: UserCreateOneInput
+  verifyEmailToken: String
   verifiedEmail: Boolean
   verifiedPhone: Boolean
-  lastSeen: DateTime!
+  lastSeen: DateTime
 }
 
 type UserEdge {
   node: User!
   cursor: String!
+}
+
+type UserInvitation {
+  id: ID!
+  inviteToken: String
+  sentBy: User!
+  sentTo: String!
+  createdAt: DateTime!
+}
+
+type UserInvitationConnection {
+  pageInfo: PageInfo!
+  edges: [UserInvitationEdge]!
+  aggregate: AggregateUserInvitation!
+}
+
+input UserInvitationCreateInput {
+  id: ID
+  inviteToken: String
+  sentBy: UserCreateOneInput!
+  sentTo: String!
+}
+
+type UserInvitationEdge {
+  node: UserInvitation!
+  cursor: String!
+}
+
+enum UserInvitationOrderByInput {
+  id_ASC
+  id_DESC
+  inviteToken_ASC
+  inviteToken_DESC
+  sentTo_ASC
+  sentTo_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type UserInvitationPreviousValues {
+  id: ID!
+  inviteToken: String
+  sentTo: String!
+  createdAt: DateTime!
+}
+
+type UserInvitationSubscriptionPayload {
+  mutation: MutationType!
+  node: UserInvitation
+  updatedFields: [String!]
+  previousValues: UserInvitationPreviousValues
+}
+
+input UserInvitationSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: UserInvitationWhereInput
+  AND: [UserInvitationSubscriptionWhereInput!]
+  OR: [UserInvitationSubscriptionWhereInput!]
+  NOT: [UserInvitationSubscriptionWhereInput!]
+}
+
+input UserInvitationUpdateInput {
+  inviteToken: String
+  sentBy: UserUpdateOneRequiredInput
+  sentTo: String
+}
+
+input UserInvitationUpdateManyMutationInput {
+  inviteToken: String
+  sentTo: String
+}
+
+input UserInvitationWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  inviteToken: String
+  inviteToken_not: String
+  inviteToken_in: [String!]
+  inviteToken_not_in: [String!]
+  inviteToken_lt: String
+  inviteToken_lte: String
+  inviteToken_gt: String
+  inviteToken_gte: String
+  inviteToken_contains: String
+  inviteToken_not_contains: String
+  inviteToken_starts_with: String
+  inviteToken_not_starts_with: String
+  inviteToken_ends_with: String
+  inviteToken_not_ends_with: String
+  sentBy: UserWhereInput
+  sentTo: String
+  sentTo_not: String
+  sentTo_in: [String!]
+  sentTo_not_in: [String!]
+  sentTo_lt: String
+  sentTo_lte: String
+  sentTo_gt: String
+  sentTo_gte: String
+  sentTo_contains: String
+  sentTo_not_contains: String
+  sentTo_starts_with: String
+  sentTo_not_starts_with: String
+  sentTo_ends_with: String
+  sentTo_not_ends_with: String
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  AND: [UserInvitationWhereInput!]
+  OR: [UserInvitationWhereInput!]
+  NOT: [UserInvitationWhereInput!]
+}
+
+input UserInvitationWhereUniqueInput {
+  id: ID
+  inviteToken: String
 }
 
 enum UserOrderByInput {
@@ -1640,6 +1944,8 @@ enum UserOrderByInput {
   resetToken_DESC
   resetTokenExpiry_ASC
   resetTokenExpiry_DESC
+  verifyEmailToken_ASC
+  verifyEmailToken_DESC
   verifiedEmail_ASC
   verifiedEmail_DESC
   verifiedPhone_ASC
@@ -1662,10 +1968,11 @@ type UserPreviousValues {
   city: String
   resetToken: String
   resetTokenExpiry: Float
+  verifyEmailToken: String
   verifiedEmail: Boolean!
   verifiedPhone: Boolean!
   createdAt: DateTime!
-  lastSeen: DateTime!
+  lastSeen: DateTime
 }
 
 enum UserRole {
@@ -1809,6 +2116,20 @@ input UserScalarWhereInput {
   resetTokenExpiry_lte: Float
   resetTokenExpiry_gt: Float
   resetTokenExpiry_gte: Float
+  verifyEmailToken: String
+  verifyEmailToken_not: String
+  verifyEmailToken_in: [String!]
+  verifyEmailToken_not_in: [String!]
+  verifyEmailToken_lt: String
+  verifyEmailToken_lte: String
+  verifyEmailToken_gt: String
+  verifyEmailToken_gte: String
+  verifyEmailToken_contains: String
+  verifyEmailToken_not_contains: String
+  verifyEmailToken_starts_with: String
+  verifyEmailToken_not_starts_with: String
+  verifyEmailToken_ends_with: String
+  verifyEmailToken_not_ends_with: String
   verifiedEmail: Boolean
   verifiedEmail_not: Boolean
   verifiedPhone: Boolean
@@ -1865,6 +2186,8 @@ input UserUpdateDataInput {
   favoriteItems: ItemUpdateManyInput
   resetToken: String
   resetTokenExpiry: Float
+  invitedBy: UserUpdateOneInput
+  verifyEmailToken: String
   verifiedEmail: Boolean
   verifiedPhone: Boolean
   lastSeen: DateTime
@@ -1883,6 +2206,8 @@ input UserUpdateInput {
   favoriteItems: ItemUpdateManyInput
   resetToken: String
   resetTokenExpiry: Float
+  invitedBy: UserUpdateOneInput
+  verifyEmailToken: String
   verifiedEmail: Boolean
   verifiedPhone: Boolean
   lastSeen: DateTime
@@ -1899,6 +2224,7 @@ input UserUpdateManyDataInput {
   city: String
   resetToken: String
   resetTokenExpiry: Float
+  verifyEmailToken: String
   verifiedEmail: Boolean
   verifiedPhone: Boolean
   lastSeen: DateTime
@@ -1915,6 +2241,7 @@ input UserUpdateManyMutationInput {
   city: String
   resetToken: String
   resetTokenExpiry: Float
+  verifyEmailToken: String
   verifiedEmail: Boolean
   verifiedPhone: Boolean
   lastSeen: DateTime
@@ -1935,6 +2262,15 @@ input UserUpdateManyWithoutCompanyInput {
 input UserUpdateManyWithWhereNestedInput {
   where: UserScalarWhereInput!
   data: UserUpdateManyDataInput!
+}
+
+input UserUpdateOneInput {
+  create: UserCreateInput
+  update: UserUpdateDataInput
+  upsert: UserUpsertNestedInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: UserWhereUniqueInput
 }
 
 input UserUpdateOneRequiredInput {
@@ -1960,6 +2296,8 @@ input UserUpdateWithoutCompanyDataInput {
   favoriteItems: ItemUpdateManyInput
   resetToken: String
   resetTokenExpiry: Float
+  invitedBy: UserUpdateOneInput
+  verifyEmailToken: String
   verifiedEmail: Boolean
   verifiedPhone: Boolean
   lastSeen: DateTime
@@ -2120,6 +2458,21 @@ input UserWhereInput {
   resetTokenExpiry_lte: Float
   resetTokenExpiry_gt: Float
   resetTokenExpiry_gte: Float
+  invitedBy: UserWhereInput
+  verifyEmailToken: String
+  verifyEmailToken_not: String
+  verifyEmailToken_in: [String!]
+  verifyEmailToken_not_in: [String!]
+  verifyEmailToken_lt: String
+  verifyEmailToken_lte: String
+  verifyEmailToken_gt: String
+  verifyEmailToken_gte: String
+  verifyEmailToken_contains: String
+  verifyEmailToken_not_contains: String
+  verifyEmailToken_starts_with: String
+  verifyEmailToken_not_starts_with: String
+  verifyEmailToken_ends_with: String
+  verifyEmailToken_not_ends_with: String
   verifiedEmail: Boolean
   verifiedEmail_not: Boolean
   verifiedPhone: Boolean

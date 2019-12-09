@@ -49,5 +49,7 @@ module.exports = shield({
   Mutation: {
     createCompany: and(isAuthenticated, doNotHaveCompany),
     createItem: and(isAuthenticated, isCompanyMember),
+    inviteUser: isAuthenticated,
+    inviteToCompany: and(isAuthenticated, isCompanyOwner),
   },
 })
